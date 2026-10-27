@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Lua Kids · Checklist de reunião</title>
+  <style>
+    :root { --ink: #25332f; --muted: #64746d; --green: #365e4c; --line: #dce3dc; --paper: #fffefa; --accent: #e9eddf; }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: var(--ink); background: #f2f1eb; font-family: "Segoe UI", Arial, sans-serif; line-height: 1.55; }
+    button, input, textarea { font: inherit; }
+    button, a, input, textarea { -webkit-tap-highlight-color: transparent; }
+    :focus-visible { outline: 3px solid #b77839; outline-offset: 3px; }
+    .page { width: min(100% - 40px, 960px); margin: 40px auto 64px; }
+    .hero { padding: 36px; background: var(--green); color: white; border-radius: 24px 24px 0 0; }
+    .eyebrow { margin: 0 0 12px; font-size: 12px; letter-spacing: .15em; text-transform: uppercase; font-weight: 700; }
+    h1 { margin: 0; font-size: clamp(30px, 5vw, 44px); line-height: 1.15; letter-spacing: -.035em; }
+    .hero p:last-child { max-width: 640px; margin-bottom: 0; color: #e0e9e2; }
+    .toolbar { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; gap: 24px; padding: 18px 24px; background: var(--paper); border: 1px solid var(--line); box-shadow: 0 5px 15px #25332f08; }
+    .progress-area { flex: 1; min-width: 0; }
+    .progress-label { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; margin-bottom: 7px; font-size: 13px; }
+    #progress-count { font-weight: 700; }
+    progress { display: block; width: 100%; height: 7px; border: 0; border-radius: 10px; overflow: hidden; background: #e7e9e2; accent-color: var(--green); }
+    progress::-webkit-progress-bar { background: #e7e9e2; }
+    progress::-webkit-progress-value { background: var(--green); border-radius: 10px; }
+    progress::-moz-progress-bar { background: var(--green); }
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    button { cursor: pointer; border: 1px solid var(--line); border-radius: 9px; background: white; padding: 10px 14px; color: var(--ink); font-size: 13px; font-weight: 600; min-height: 44px; }
+    button:hover { background: #eef1e9; }
+    .primary { background: var(--green); color: white; border-color: var(--green); }
+    .primary:hover { background: #284d3b; }
+    .danger { color: #9b3f35; }
+    .intro { padding: 18px 24px; border: 1px solid var(--line); border-top: 0; background: #eaf0e8; border-radius: 0 0 16px 16px; font-size: 13px; }
+    .intro p { margin: 0; }
+    #save-status { display: block; margin-top: 5px; color: var(--muted); }
+    .card { margin-top: 22px; padding: 28px; border: 1px solid var(--line); border-radius: 16px; background: var(--paper); }
+    h2 { font-size: 20px; margin: 0; line-height: 1.35; letter-spacing: -.02em; }
+    .section-heading { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+    .number { flex-shrink: 0; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--accent); color: var(--green); font-size: 12px; font-weight: 700; }
+    .section-note { margin: 6px 0 20px; color: var(--muted); font-size: 13px; }
+    .section-count { margin-left: auto; color: var(--muted); white-space: nowrap; font-size: 12px; }
+    .metadata { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+    .field-label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 600; }
+    input[type="text"], input[type="date"], textarea { display: block; width: 100%; min-width: 0; border: 1px solid #cdd6cd; border-radius: 8px; background: white; padding: 11px 12px; color: var(--ink); font-size: 15px; }
+    textarea { min-height: 88px; resize: vertical; overflow-y: hidden; line-height: 1.5; }
+    input::placeholder, textarea::placeholder { color: #8b948f; opacity: 1; }
+    .question { padding: 20px 0; border-top: 1px solid var(--line); }
+    .question:last-child { padding-bottom: 0; }
+    .check-label { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; font-weight: 600; }
+    input[type="checkbox"] { width: 20px; height: 20px; flex: 0 0 20px; margin: 3px 0 0; accent-color: var(--green); cursor: pointer; }
+    .hint { margin: 5px 0 12px 30px; font-size: 13px; color: var(--muted); }
+    .question.discussed .check-label { color: var(--green); }
+    .conditional { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; border: 1px solid #d5c6a2; color: #80652d; border-radius: 5px; padding: 2px 6px; margin-bottom: 8px; }
+    a { color: var(--green); text-underline-offset: 3px; }
+    .references { font-size: 13px; margin: 12px 0 0; }
+    .materials { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 22px; margin: 20px 0; }
+    .materials .check-label { font-weight: 400; font-size: 14px; }
+    .table-wrap { overflow-x: auto; }
+    table { border-collapse: collapse; width: 100%; margin: 20px 0 14px; table-layout: fixed; }
+    th { text-align: left; font-size: 12px; color: var(--muted); background: #f3f4ee; padding: 10px 8px; }
+    td { padding: 8px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th:first-child { width: 46%; }
+    th:nth-child(2) { width: 27%; }
+    th:nth-child(3) { width: 27%; }
+    .pending textarea { min-height: 68px; font-size: 13px; padding: 8px; }
+    .remove-row { padding: 0; min-height: 32px; font-size: 11px; border: 0; background: transparent; color: #9b3f35; }
+    .print-value { display: none; }
+    .footer { text-align: center; color: var(--muted); font-size: 12px; padding-top: 24px; }
+    noscript p { padding: 24px; border: 2px solid #b77839; background: white; }
+    @media (max-width: 640px) {
+      .page { width: min(100% - 24px, 960px); margin: 12px auto 32px; }
+      .hero { padding: 28px 22px; border-radius: 18px 18px 0 0; }
+      .toolbar { padding: 14px; gap: 12px; flex-direction: column; align-items: stretch; }
+      .actions { display: grid; grid-template-columns: 1fr 1fr; }
+      .actions button { padding: 8px; font-size: 12px; }
+      .intro { padding: 14px; }
+      .card { padding: 20px 16px; margin-top: 16px; }
+      .metadata, .materials { grid-template-columns: 1fr; gap: 16px; }
+      h2 { font-size: 18px; }
+      .section-heading { gap: 8px; }
+      .number { width: 28px; height: 28px; }
+      .section-count { font-size: 11px; }
+      .check-label { font-size: 15px; }
+      .pending table { min-width: 520px; }
+    }
+    @page { size: A4; margin: 15mm; }
+    @media print {
+      * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      body { background: white; color: #111; font-size: 10pt; }
+      .page { width: 100%; margin: 0; }
+      .hero { padding: 0 0 14px; color: #111; background: white; border-radius: 0; border-bottom: 2px solid #365e4c; }
+      h1 { font-size: 26pt; }
+      .hero p:last-child { color: #444; }
+      .eyebrow { color: #365e4c; }
+      .toolbar, .actions, button, #save-status, .footer, .references { display: none !important; }
+      .intro { padding: 10px 0; border: 0; background: white; font-size: 9pt; }
+      .card { border: 0; border-radius: 0; padding: 14px 0 0; margin: 12px 0 0; }
+      h2 { font-size: 14pt; }
+      .section-heading, .section-note { break-after: avoid; }
+      .section-count { font-size: 9pt; }
+      .number { width: 26px; height: 26px; }
+      .section-note, .hint { font-size: 9pt; color: #444; }
+      .metadata { grid-template-columns: 1fr 1fr; gap: 12px 20px; }
+      .field { break-inside: avoid; }
+      input[type="text"], input[type="date"], textarea { display: none !important; }
+      input[type="checkbox"] { width: 14px; height: 14px; flex-basis: 14px; margin-top: 3px; appearance: auto; }
+      .print-value { display: block; white-space: pre-wrap; overflow-wrap: anywhere; min-height: 24px; border-bottom: 1px solid #ccc; padding: 4px 0; font-size: 10pt; }
+      .print-value.empty { min-height: 34px; }
+      .question { padding: 12px 0; break-inside: avoid; }
+      .check-label { font-size: 10pt; }
+      .hint { margin-left: 24px; margin-bottom: 6px; }
+      .materials { grid-template-columns: 1fr 1fr; gap: 10px 18px; }
+      .materials .check-label { font-size: 9pt; }
+      .table-wrap { overflow: visible; }
+      .pending table { min-width: 0; }
+      table { margin-top: 12px; }
+      thead { display: table-header-group; }
+      tr { break-inside: avoid; }
+      th { font-size: 9pt; }
+      td .print-value { font-size: 9pt; border: 0; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="hero">
+      <p class="eyebrow">Lua Kids · Planejamento da loja virtual</p>
+      <h1>Uma boa reunião.<br>Um projeto bem definido.</h1>
+      <p>Checklist para conversar com o dono, registrar as decisões e reunir o necessário para construir e entregar a loja.</p>
+    </header>
+    <div class="toolbar" aria-label="Progresso e ações">
+      <div class="progress-area">
+        <div class="progress-label"><span>Perguntas discutidas</span><span id="progress-count" aria-live="polite">0 de 33</span></div>
+        <progress id="progress" value="0" max="33" aria-label="Perguntas discutidas"></progress>
+      </div>
+      <div class="actions">
+        <button type="button" class="primary" id="print">Imprimir / Salvar PDF</button>
+        <button type="button" class="danger" id="clear">Limpar respostas</button>
+      </div>
+    </div>
+    <aside class="intro">
+      <p><strong>Como usar:</strong> marque a caixa depois de discutir cada pergunta e registre a decisão no campo abaixo. Se algo não se aplicar, escreva “Não se aplica”. O que ficar sem definição vai para a tabela de pendências.</p>
+      <span id="save-status" role="status">As respostas são salvas automaticamente neste navegador e dispositivo. Guarde um PDF ao terminar; outro navegador ou arquivo pode não compartilhar os dados.</span>
+    </aside>
+    <noscript><p>Ative o JavaScript no navegador para carregar as perguntas e preencher o checklist.</p></noscript>
+    <section class="card" aria-labelledby="meeting-title">
+      <h2 id="meeting-title">Dados da reunião</h2>
+      <div class="metadata">
+        <div class="field"><label class="field-label" for="meeting-date">Data da reunião</label><input type="date" id="meeting-date" data-field="meeting-date"></div>
+        <div class="field"><label class="field-label" for="launch-date">Previsão de lançamento</label><input type="text" id="launch-date" data-field="launch-date" placeholder="Data ou período desejado"></div>
+        <div class="field"><label class="field-label" for="participants">Participantes e funções</label><textarea id="participants" data-field="participants" placeholder="Nome e papel de cada participante"></textarea></div>
+        <div class="field"><label class="field-label" for="contact">Responsável pelas decisões e contato</label><textarea id="contact" data-field="contact" placeholder="Nome, WhatsApp ou e-mail"></textarea></div>
+      </div>
+    </section>
+    <div id="sections"></div>
+    <section class="card" aria-labelledby="materials-title">
+      <h2 id="materials-title">Materiais a receber</h2>
+      <p class="section-note">Marque somente o que já foi recebido ou cujo acesso foi concedido. Registre os itens faltantes nas pendências abaixo.</p>
+      <div class="materials" id="materials"></div>
+      <label class="field-label" for="material-notes">Links dos arquivos e observações</label>
+      <textarea id="material-notes" data-field="material-notes" placeholder="Pasta das fotos, planilha dos produtos, documentos… Não registre senhas aqui."></textarea>
+    </section>
+    <section class="card pending" aria-labelledby="pending-title">
+      <h2 id="pending-title">Pendências e próximos passos</h2>
+      <p class="section-note">Cada item deve ter alguém responsável e uma data combinada. Use esta tabela para acompanhar o que falta para começar ou entregar.</p>
+      <div class="table-wrap"><table aria-label="Pendências da reunião">
+        <thead><tr><th scope="col">Descrição</th><th scope="col">Responsável</th><th scope="col">Prazo</th></tr></thead>
+        <tbody id="pending-rows"></tbody>
+      </table></div>
+      <button type="button" id="add-row">+ Adicionar pendência</button>
+    </section>
+    <section class="card" aria-labelledby="decisions-title">
+      <h2 id="decisions-title">Combinados finais</h2>
+      <p class="section-note">Registre o que foi aprovado, o que fica para uma próxima etapa e a próxima data de contato.</p>
+      <textarea id="final-notes" data-field="final-notes" placeholder="Decisões finais, limites da primeira versão e próximo encontro…"></textarea>
+    </section>
+    <footer class="footer">Lua Kids · HTML, CSS e JavaScript + Supabase<br>Checklist local: nenhuma resposta é enviada para um servidor.</footer>
+  </main>
+  <script>
+    'use strict';
+    const STORAGE_KEY = 'lua-kids:checklist-reuniao:v1';
+    const sections = [
+      { id: 'objetivo', title: 'Objetivo e referências', note: 'Defina para quem a loja vende e a direção que o cliente espera.', questions: [
+        ['publico', 'A loja venderá no atacado, no varejo ou nos dois? Para quem?', 'Consumidor final, lojistas ou revendedores. Essa decisão orienta os preços e as regras de compra.'],
+        ['referencias', 'O que o dono quer aproveitar de cada loja de referência?', 'Peça exemplos concretos de aparência, categorias, apresentação dos produtos e compra. Registre também o que ele quer diferente.']
+      ]},
+      { id: 'compra', title: 'Como a compra acontece', note: 'Prioridade da reunião: esta decisão muda bastante o trabalho e as integrações.', questions: [
+        ['finalizacao', 'O pedido será fechado pelo WhatsApp ou pago dentro do site?', 'No WhatsApp: qual número receberá os pedidos e o pedido também ficará salvo no sistema? No site: o pagamento será aprovado automaticamente?'],
+        ['cadastro', 'O cliente poderá comprar sem conta? Revendedores precisam de aprovação?', 'Defina se o cadastro é obrigatório e se todos podem ver os preços ou se haverá acesso restrito.'],
+        ['acompanhamento', 'Como o cliente saberá que o pedido foi confirmado e enviado?', 'WhatsApp, e-mail ou área de pedidos. Quem confirma a compra e envia as atualizações?']
+      ]},
+      { id: 'catalogo', title: 'Produtos e catálogo', note: 'Precisamos entender como uma peça é cadastrada e escolhida na compra.', questions: [
+        ['produtos', 'Quais categorias e quantos produtos entrarão no lançamento?', 'Peça a lista inicial e exemplos reais. Separe a quantidade de modelos da quantidade de variações.'],
+        ['variacoes', 'Quais variações o comprador poderá escolher?', 'Tamanho, cor, estampa ou outras opções. Confirme se preço, foto e estoque mudam por variação.'],
+        ['unidade', 'A venda será por peça, kit ou grade fechada?', 'Se houver kit ou grade, peça um exemplo com composição, tamanhos, quantidade e preço. O cliente pode misturar as opções?'],
+        ['ficha', 'Quais informações e fotos precisam aparecer em cada produto?', 'Ex.: descrição, composição, tabela de medidas e fotos das variações. Há vídeo ou algum detalhe indispensável?']
+      ]},
+      { id: 'precos', title: 'Preços e condições de venda', note: 'Regras comerciais precisam estar claras antes de montar o carrinho.', questions: [
+        ['minimo', 'Existe pedido mínimo ou preço diferente por tipo de cliente ou quantidade?', 'Registre valores e quantidades exatos: mínimo por pedido, produto ou grade; atacado e varejo.'],
+        ['pagamento', 'Quais pagamentos serão aceitos e quais são as condições?', 'Pix, cartão ou outros; descontos, parcelas e juros. Se for pagamento online, qual provedor será usado e a conta já existe?'],
+        ['promocoes', 'Quais descontos ou promoções precisam existir já no lançamento?', 'Cupons, ofertas por produto ou descontos por quantidade. Confirme se podem ser combinados. Se não houver, registre.']
+      ]},
+      { id: 'estoque', title: 'Estoque e operação', note: 'Evite vender peças indisponíveis e defina quem mantém os dados atualizados.', questions: [
+        ['controle', 'O site controlará o estoque? Quem atualiza as quantidades?', 'Defina se o controle é por tamanho e cor, se haverá encomendas e se itens esgotados ficam visíveis.'],
+        ['canais', 'O mesmo estoque é vendido em loja física, Instagram ou outro sistema?', 'Como as vendas desses canais chegam ao site: atualização manual ou integração? Peça o nome do sistema existente.'],
+        ['reserva', 'Quando uma peça fica reservada e quando volta ao estoque?', 'Pedido enviado, confirmação manual ou pagamento. Combine a regra para desistência, cancelamento, falta de pagamento e indisponibilidade.']
+      ]},
+      { id: 'entrega', title: 'Entrega, frete e retirada', note: 'Defina o que o cliente verá antes de confirmar o pedido.', questions: [
+        ['modalidades', 'Quais regiões serão atendidas e quais entregas estarão disponíveis?', 'Correios, transportadora, motoboy, excursão ou retirada. Registre limitações por região.'],
+        ['frete', 'Como o valor do frete será informado?', 'Cálculo automático, tabela ou combinação pelo WhatsApp. Se automático: serviço utilizado, CEP de origem, pesos e dimensões das embalagens. Existe frete grátis?'],
+        ['prazos', 'Qual é o prazo de preparação e como funciona a retirada?', 'Informe endereço, horários, antecedência e quem pode retirar. Separe preparação do pedido do prazo de transporte.']
+      ]},
+      { id: 'admin', title: 'Painel administrativo', note: 'Escolha o que a equipe realmente precisará administrar sozinha.', questions: [
+        ['funcoes', 'O que precisa ser gerenciado no painel desde o lançamento?', 'Produtos, fotos, categorias, preços, estoque, pedidos, banners e cupons. Registre somente as funções necessárias.'],
+        ['acessos', 'Quem usará o painel e quais permissões cada pessoa terá?', 'Quantas pessoas terão acesso? Alguma poderá apenas consultar pedidos, enquanto outra altera preços ou produtos?']
+      ]},
+      { id: 'marca', title: 'Marca, fotos e cadastro inicial', note: 'Materiais e responsáveis definidos evitam atrasos na construção da loja.', questions: [
+        ['identidade', 'A marca já tem nome oficial, logo, cores e estilo visual definidos?', 'Solicite os arquivos existentes e uma direção visual. Se algo ainda precisa ser criado, deixe isso registrado no escopo.'],
+        ['conteudo', 'Quem fornecerá fotos, descrições, medidas e banners? Até quando?', 'Confirme se os materiais já estão prontos e se a loja tem autorização para utilizar as imagens.'],
+        ['cadastro-inicial', 'Quem fará o cadastro inicial e como os dados serão entregues?', 'Planilha, catálogo ou sistema atual. Combine quem organiza as variações e confere preços e estoque antes de publicar.']
+      ]},
+      { id: 'empresa', title: 'Dados da empresa e políticas', note: 'O cliente precisa aprovar os dados públicos e as condições de atendimento.', questions: [
+        ['dados', 'Quais dados e contatos oficiais devem aparecer na loja?', 'Nome comercial, dados da empresa, endereço, WhatsApp, e-mail, Instagram e horário de atendimento.'],
+        ['politicas', 'A loja já tem regras de troca, devolução, cancelamento e privacidade?', 'Peça os textos e confirme quem será responsável por fornecer e aprovar as versões finais, incluindo pagamento e entrega.']
+      ]},
+      { id: 'contas', title: 'Domínio, contas e integrações', note: 'Identifique dependências externas antes de prometer funcionalidades.', questions: [
+        ['dominio', 'Já existe domínio ou site? Algum conteúdo precisa ser migrado?', 'Anote domínio, serviço atual e o que precisa ser aproveitado: produtos, clientes ou pedidos.'],
+        ['integracoes', 'Existe alguma integração obrigatória para o lançamento?', 'Ex.: estoque, emissão de notas, transportadoras ou pagamentos. Peça nomes dos serviços e contatos de suporte; registre “Nenhuma” se não houver.'],
+        ['titularidade', 'Quem será titular e dará acesso às contas dos serviços?', 'Domínio, hospedagem, Supabase e serviços escolhidos. Prefira contas do cliente e convites de acesso. Não anote senhas neste checklist.']
+      ]},
+      { id: 'combinados', title: 'Prazo, orçamento e aprovações', note: 'Combine condições reais de entrega e evite expectativas diferentes.', questions: [
+        ['prazo', 'Qual é a data desejada e existe algum compromisso que fixe esse prazo?', 'Campanha, coleção ou evento. Confirme quando fotos, textos e produtos estarão disponíveis.'],
+        ['orcamento', 'Qual é o orçamento e quem assume os custos recorrentes?', 'Separe desenvolvimento, domínio, hospedagem, banco de dados, pagamentos e demais serviços contratados.'],
+        ['aprovacoes', 'Quem dará a aprovação final e em quanto tempo responderá às entregas?', 'Combine aprovação do visual antes do desenvolvimento completo e como mudanças no escopo serão avaliadas.']
+      ]},
+      { id: 'entrega-final', title: 'Aprovação e entrega final', note: 'Deixe explícito o que significa terminar o projeto.', questions: [
+        ['aceite', 'O que precisa estar pronto e validado para a loja ser aprovada?', 'Registre páginas e funções da primeira versão. Inclua compra de teste no celular e computador, regras de venda, frete, pedido e painel; pagamento apenas se fizer parte do projeto.'],
+        ['pos-entrega', 'Quem receberá a orientação de uso e como será o suporte após o lançamento?', 'Combine treinamento, publicação no domínio, período de correções e contratação de manutenção ou novas funcionalidades.']
+      ]}
+    ];
+    const materials = [
+      ['logo', 'Logo e referências visuais'], ['fotos', 'Fotos dos produtos e banners'],
+      ['planilha', 'Planilha de produtos, preços e variações'], ['estoque', 'Estoque inicial e composição de kits/grades'],
+      ['medidas', 'Descrições, composição e medidas'], ['regras', 'Regras de atacado, pagamento e entrega'],
+      ['politicas', 'Textos das políticas aprovados'], ['empresa', 'Dados da empresa e contatos oficiais'],
+      ['acessos', 'Domínio e convites de acesso necessários'], ['escopo', 'Escopo, prazo e orçamento aprovados']
+    ];
+    const fields = new Map();
+    const checks = new Map();
+    let saveTimer;
+    let storageAvailable = true;
+    let lastSave = '';
+
+    function element(tag, className, text) {
+      const node = document.createElement(tag);
+      if (className) node.className = className;
+      if (text !== undefined) node.textContent = text;
+      return node;
+    }
+    function fitTextarea(field) {
+      if (field.tagName !== 'TEXTAREA') return;
+      field.style.height = 'auto';
+      field.style.height = Math.max(68, field.scrollHeight + 2) + 'px';
+    }
+    function syncField(field) {
+      const mirror = field.nextElementSibling;
+      let text = field.value;
+      if (field.type === 'date' && /^\d{4}-\d{2}-\d{2}$/.test(text)) text = text.split('-').reverse().join('/');
+      mirror.textContent = text;
+      mirror.classList.toggle('empty', !text.trim());
+      fitTextarea(field);
+    }
+    function registerField(field) {
+      const mirror = element('div', 'print-value empty');
+      mirror.setAttribute('aria-hidden', 'true');
+      field.after(mirror);
+      fields.set(field.dataset.field, field);
+      syncField(field);
+    }
+    function checkbox(key, labelText, question = false) {
+      const label = element('label', 'check-label');
+      const input = document.createElement('input');
+      input.type = 'checkbox';
+      input.dataset.check = key;
+      if (question) input.dataset.question = 'true';
+      checks.set(key, input);
+      label.append(input, element('span', '', labelText));
+      return label;
+    }
+    function buildSections() {
+      const target = document.getElementById('sections');
+      sections.forEach((section, index) => {
+        const card = element('section', 'card');
+        card.dataset.section = section.id;
+        card.setAttribute('aria-labelledby', 'title-' + section.id);
+        const heading = element('div', 'section-heading');
+        const title = element('h2', '', section.title);
+        title.id = 'title-' + section.id;
+        heading.append(element('span', 'number', String(index + 1).padStart(2, '0')), title, element('span', 'section-count'));
+        card.append(heading, element('p', 'section-note', section.note));
+        section.questions.forEach(([id, titleText, hint]) => {
+          const key = section.id + '-' + id;
+          const question = element('div', 'question');
+          if (id === 'integracoes' || id === 'reserva') {
+            question.append(element('span', 'conditional', id === 'integracoes' ? 'Se houver serviços externos' : 'Se houver controle de estoque'));
+          }
+          const input = element('textarea');
+          input.id = 'answer-' + key;
+          input.dataset.field = key;
+          input.setAttribute('aria-label', 'Resposta: ' + titleText);
+          input.setAttribute('aria-describedby', 'hint-' + key);
+          input.placeholder = 'Decisão, regra ou informação a confirmar…';
+          const hintNode = element('p', 'hint', hint);
+          hintNode.id = 'hint-' + key;
+          question.append(checkbox(key, titleText, true), hintNode, input);
+          card.append(question);
+        });
+        if (section.id === 'objetivo') {
+          const links = element('p', 'references', 'Referências: ');
+          [['Miguxas e Miguxos Kids', 'https://miguxasemiguxoskids.com.br/c/principal'], ['July Baby Atacado', 'https://julybabyatacado.vendizap.com/']].forEach(([name, href], i) => {
+            if (i) links.append(document.createTextNode(' · '));
+            const link = element('a', '', name);
+            link.href = href; link.target = '_blank'; link.rel = 'noopener noreferrer';
+            links.append(link);
+          });
+          card.append(links);
+        }
+        target.append(card);
+      });
+      materials.forEach(([id, label]) => document.getElementById('materials').append(checkbox('material-' + id, label)));
+      document.querySelectorAll('[data-field]').forEach(registerField);
+    }
+    function addRow(values = {}) {
+      const row = document.createElement('tr');
+      ['description', 'owner', 'deadline'].forEach((key, index) => {
+        const cell = document.createElement('td');
+        const field = document.createElement('textarea');
+        field.dataset.pending = key;
+        field.placeholder = ['O que falta?', 'Nome', 'Data ou período'][index];
+        field.value = typeof values[key] === 'string' ? values[key] : '';
+        cell.append(field, element('div', 'print-value'));
+        row.append(cell);
+        syncField(field);
+      });
+      const remove = element('button', 'remove-row', 'Remover linha');
+      remove.type = 'button';
+      remove.addEventListener('click', () => {
+        const hasContent = [...row.querySelectorAll('textarea')].some(field => field.value.trim());
+        if (hasContent && !window.confirm('Remover esta pendência e seu conteúdo?')) return;
+        row.remove();
+        if (!document.getElementById('pending-rows').children.length) addRow();
+        refreshRowLabels();
+        save();
+      });
+      row.firstElementChild.append(remove);
+      document.getElementById('pending-rows').append(row);
+      row.querySelectorAll('textarea').forEach(syncField);
+      refreshRowLabels();
+      return row;
+    }
+    function refreshRowLabels() {
+      document.querySelectorAll('#pending-rows tr').forEach((row, index) => {
+        row.querySelectorAll('textarea').forEach((field, col) => field.setAttribute('aria-label', ['Descrição', 'Responsável', 'Prazo'][col] + ' da pendência ' + (index + 1)));
+        row.querySelector('button').setAttribute('aria-label', 'Remover pendência ' + (index + 1));
+      });
+    }
+    function updateProgress() {
+      const questions = [...checks.values()].filter(input => input.dataset.question);
+      const done = questions.filter(input => input.checked).length;
+      const progress = document.getElementById('progress');
+      progress.max = questions.length; progress.value = done;
+      document.getElementById('progress-count').textContent = done + ' de ' + questions.length;
+      document.querySelectorAll('[data-section]').forEach(card => {
+        const inputs = [...card.querySelectorAll('[data-question]')];
+        card.querySelector('.section-count').textContent = inputs.filter(input => input.checked).length + '/' + inputs.length;
+        inputs.forEach(input => input.closest('.question').classList.toggle('discussed', input.checked));
+      });
+    }
+    function getState() {
+      return {
+        version: 1,
+        fields: Object.fromEntries([...fields].map(([key, field]) => [key, field.value])),
+        checks: Object.fromEntries([...checks].map(([key, input]) => [key, input.checked])),
+        pending: [...document.querySelectorAll('#pending-rows tr')].map(row => Object.fromEntries([...row.querySelectorAll('textarea')].map(field => [field.dataset.pending, field.value])))
+      };
+    }
+    function setStatus() {
+      document.getElementById('save-status').textContent = storageAvailable
+        ? (lastSave ? 'Salvo às ' + lastSave + '. ' : '') + 'Respostas guardadas apenas neste navegador e dispositivo. Salve um PDF ao terminar.'
+        : 'O navegador não permitiu salvar as respostas. Mantenha esta página aberta e use “Imprimir / Salvar PDF” para guardar o preenchimento.';
+    }
+    function save() {
+      clearTimeout(saveTimer);
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(getState()));
+        storageAvailable = true;
+        lastSave = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+      } catch { storageAvailable = false; }
+      setStatus();
+    }
+    function load() {
+      let state = null;
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          state = JSON.parse(raw);
+          if (!state || state.version !== 1) throw new Error('Formato de dados desconhecido');
+        }
+      } catch { storageAvailable = false; setStatus(); }
+      if (state && state.version === 1) {
+        fields.forEach((field, key) => { if (typeof state.fields?.[key] === 'string') field.value = state.fields[key]; });
+        checks.forEach((input, key) => { input.checked = state.checks?.[key] === true; });
+        if (Array.isArray(state.pending)) state.pending.forEach(values => addRow(values && typeof values === 'object' ? values : {}));
+      }
+      if (!document.getElementById('pending-rows').children.length) for (let i = 0; i < 4; i++) addRow();
+      fields.forEach(syncField);
+      updateProgress();
+    }
+    function preparePrint() {
+      document.querySelectorAll('[data-field], [data-pending]').forEach(syncField);
+      save();
+    }
+    buildSections();
+    load();
+    document.addEventListener('input', event => {
+      if (!event.target.matches('[data-field], [data-pending]')) return;
+      syncField(event.target);
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(save, 250);
+    });
+    document.addEventListener('change', event => {
+      if (event.target.matches('[data-check]')) { updateProgress(); save(); }
+      else if (event.target.matches('[data-field], [data-pending]')) { syncField(event.target); save(); }
+    });
+    document.getElementById('add-row').addEventListener('click', () => {
+      const row = addRow();
+      row.querySelector('textarea').focus();
+      save();
+    });
+    document.getElementById('print').addEventListener('click', () => { preparePrint(); window.print(); });
+    document.getElementById('clear').addEventListener('click', () => {
+      if (!window.confirm('Limpar todas as respostas, marcações e pendências desta reunião? Esta ação não pode ser desfeita.')) return;
+      fields.forEach(field => { field.value = ''; syncField(field); });
+      checks.forEach(input => { input.checked = false; });
+      document.getElementById('pending-rows').replaceChildren();
+      for (let i = 0; i < 4; i++) addRow();
+      updateProgress();
+      save();
+    });
+    window.addEventListener('beforeprint', preparePrint);
+    window.addEventListener('pagehide', save);
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') save(); });
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => document.querySelectorAll('textarea').forEach(fitTextarea), 100);
+    });
+  </script>
+</body>
+</html>
