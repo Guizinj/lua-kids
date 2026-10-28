@@ -1,0 +1,655 @@
+/* Adaptações por largura de tela e respeito à preferência por movimento reduzido. */
+/* Ajustes em monitores largos. */
+@media (min-width: 1400px) {
+  .hero-grid {
+    min-height: 520px;
+  }
+  .hero-copy {
+    padding-left: 65px;
+  }
+}
+/* Redistribuição das colunas em notebooks e tablets. */
+@media (max-width: 1050px) {
+  .container {
+    width: calc(100% - 48px);
+  }
+  .announcement {
+    padding-inline: 24px;
+  }
+  .header-main {
+    gap: 22px;
+  }
+  .header-search {
+    max-width: 340px;
+  }
+  .header-account span {
+    display: none;
+  }
+  .hero-copy {
+    padding: 40px 25px 40px 35px;
+  }
+  .hero-grid {
+    min-height: 420px;
+  }
+  .hero-image {
+    min-height: 420px;
+  }
+  .hero h1 {
+    font-size: 46px;
+  }
+  .perks {
+    gap: 15px;
+  }
+  .perk {
+    gap: 8px;
+  }
+  .perk > .icon {
+    width: 22px;
+    height: 22px;
+  } /* Catálogo: filtros ao lado dos resultados, empilhados em telas pequenas. */
+  .catalog-layout {
+    grid-template-columns: 175px minmax(0, 1fr);
+    gap: 25px;
+  }
+  .catalog-layout /* Grade visual dos cartões; no celular passa para duas colunas. */
+.product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  } /* Detalhe do produto e composição da grade fechada. */
+  .product-detail {
+    gap: 35px;
+  }
+  .detail-copy h1 {
+    font-size: 35px;
+  }
+  .admin-layout {
+    grid-template-columns: 180px minmax(0, 1fr);
+    gap: 18px;
+  } /* Fechamento: formulário e resumo do pedido. */
+  .form-layout {
+    grid-template-columns: minmax(0, 1.2fr) minmax(270px, 1fr);
+    gap: 20px;
+  }
+  .panel-card {
+    padding: 23px;
+  }
+  .banner-facts {
+    gap: 25px;
+  }
+  .split-banner > div {
+    padding: 30px;
+  } /* Detalhes do pedido: seleção, acompanhamento, endereço e comprovante. */
+  .order-columns {
+    grid-template-columns: 1.2fr 1fr;
+  }
+}
+/* Versão móvel: formulários maiores, colunas empilhadas e navegação horizontal. */
+@media (max-width: 760px) {
+  .container {
+    width: calc(100% - 32px);
+  }
+  .announcement {
+    padding: 8px 15px;
+    font-size: 9px;
+    justify-content: center;
+    text-align: center;
+  }
+  .announcement-delivery {
+    display: none;
+  }
+  .header-main {
+    min-height: 80px;
+    gap: 15px;
+    flex-wrap: wrap;
+    padding-top: 12px;
+    padding-bottom: 13px;
+  }
+  .brand-seal {
+    width: 44px;
+    height: 44px;
+  }
+  .brand {
+    gap: 8px;
+  }
+  .brand-name {
+    font-size: 28px;
+  }
+  .brand-name small {
+    font-size: 7px;
+    margin-top: 5px;
+  }
+  .header-search {
+    order: 3;
+    max-width: none;
+    flex-basis: 100%;
+    margin: 0;
+  }
+  .header-search input {
+    padding: 11px 42px 11px 16px;
+    font-size: 16px;
+  }
+  .header-search button {
+    top: 1px;
+  }
+  .header-actions {
+    margin-left: auto;
+    gap: 5px;
+  }
+  .icon-button {
+    min-width: 36px;
+    min-height: 40px;
+  }
+  .header-actions .icon {
+    width: 20px;
+    height: 20px;
+  }
+  .header-nav {
+    min-height: 41px;
+    gap: 23px;
+    overflow-x: auto;
+    font-size: 11px;
+    scrollbar-width: none;
+  }
+  .header-nav a {
+    padding: 12px 0;
+  }
+  .header-nav .admin-link {
+    font-size: 10px;
+    gap: 4px;
+  }
+  .header-nav .admin-link .icon {
+    width: 14px;
+    height: 14px;
+  }
+  .demo-bar {
+    padding: 8px 16px;
+    gap: 6px;
+    flex-wrap: wrap;
+    font-size: 9px;
+  }
+  .demo-bar > span:last-child {
+    width: 100%;
+    text-align: center;
+  } /* Banner de apresentação: texto e imagem em duas colunas no computador. */
+  .hero {
+    padding-top: 18px;
+    padding-bottom: 16px;
+  }
+  .hero-grid {
+    grid-template-columns: 1fr;
+    border-radius: 5px 55px 5px 5px;
+  }
+  .hero-copy {
+    padding: 33px 27px 31px;
+  }
+  .hero h1 {
+    font-size: 42px;
+    margin-bottom: 15px;
+  }
+  .hero-description {
+    font-size: 12px;
+    max-width: 300px;
+    margin-bottom: 20px;
+  }
+  .hero-image {
+    height: 295px;
+    min-height: 0;
+  }
+  .hero-image > img {
+    object-position: center 45%;
+  }
+  .hero-note {
+    bottom: 15px;
+    left: 15px;
+    padding: 11px 15px;
+    font-size: 11px;
+  }
+  .hero-note small {
+    font-size: 9px;
+  }
+  .hero-caption {
+    margin-top: 15px;
+    font-size: 9px;
+  }
+  .hero .eyebrow {
+    margin-bottom: 15px;
+    font-size: 9px;
+  }
+  .perks {
+    grid-template-columns: 1fr 1fr;
+    padding: 18px 0 22px;
+    gap: 22px 13px;
+  }
+  .perk {
+    gap: 9px;
+    font-size: 10px;
+    align-items: flex-start;
+  }
+  .perk > .icon {
+    width: 23px;
+    height: 23px;
+  }
+  .perk span {
+    font-size: 9px;
+    line-height: 1.6;
+  }
+  .section {
+    padding-block: 34px;
+  }
+  .section-heading {
+    margin-bottom: 20px;
+    align-items: flex-start;
+  }
+  .section-heading h2 {
+    font-size: 30px;
+  }
+  .section-heading p {
+    font-size: 11px;
+    max-width: 230px;
+  }
+  .section-heading .text-link {
+    font-size: 10px;
+    margin-top: 32px;
+    white-space: nowrap;
+  }
+  .section-heading .eyebrow {
+    font-size: 9px;
+    margin-bottom: 10px;
+  }
+  .product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px 13px;
+  }
+  .product-photo {
+    border-radius: 8px;
+    aspect-ratio: 4/5;
+  }
+  .product-tag {
+    top: 9px;
+    left: 9px;
+    font-size: 8px;
+    padding: 5px 6px;
+    max-width: calc(100% - 46px);
+  }
+  .favorite-button {
+    right: 5px;
+    top: 5px;
+    min-height: 30px;
+    min-width: 30px;
+  }
+  .favorite-button .icon {
+    width: 15px;
+    height: 15px;
+  }
+  .product-category {
+    font-size: 8px;
+    margin-top: 13px;
+    letter-spacing: 0.08em;
+  }
+  .product-title {
+    font-size: 12px;
+    line-height: 1.5;
+    margin-bottom: 5px;
+  }
+  .product-meta {
+    font-size: 9px;
+    margin-bottom: 9px;
+    min-height: 27px;
+  }
+  .product-price strong,
+  .catalog-layout .product-price strong {
+    font-size: 16px;
+  }
+  .product-price strong small {
+    display: block;
+    font-size: 9px;
+    margin-top: 3px;
+  }
+  .add-button {
+    width: 32px;
+    height: 32px;
+    min-height: 32px;
+    flex-shrink: 0;
+  }
+  .product-sold {
+    font-size: 8px;
+  }
+  .category-tabs {
+    gap: 7px;
+    margin-bottom: 22px;
+  }
+  .chip {
+    font-size: 10px;
+    padding: 9px 14px;
+    min-height: 36px;
+  }
+  .split-banner {
+    grid-template-columns: 1fr;
+    margin-bottom: 34px;
+  }
+  .split-banner > div {
+    padding: 28px;
+  }
+  .split-banner h2 {
+    font-size: 30px;
+  }
+  .split-banner p {
+    margin-bottom: 15px;
+  }
+  .banner-facts {
+    border-left: 0;
+    border-top: 1px solid #dce0d0;
+    justify-content: flex-start;
+    padding-block: 20px !important;
+  }
+  .banner-facts strong {
+    font-size: 36px;
+  }
+  .banner-facts span {
+    font-size: 10px;
+  }
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+  .footer-grid > div:first-child {
+    grid-column: 1/-1;
+  }
+  .footer-grid p {
+    max-width: 300px;
+    font-size: 11px;
+    margin-bottom: 0;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    gap: 10px;
+    line-height: 1.8;
+  }
+  .page-heading {
+    padding-top: 25px;
+    margin-bottom: 23px;
+  }
+  .page-heading h1 {
+    font-size: 35px;
+  }
+  .page-heading p {
+    font-size: 12px;
+  }
+  .breadcrumb {
+    font-size: 10px;
+    margin-bottom: 20px;
+  }
+  .catalog-layout {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+  .filters {
+    padding: 17px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 13px;
+  }
+  .filters h2 {
+    grid-column: 1/-1;
+    margin-bottom: 0;
+  }
+  .filter-field {
+    margin: 0;
+  }
+  .filter-field select,
+  .filter-field input[type="search"] {
+    font-size: 16px;
+    padding: 10px 7px;
+  }
+  .filter-field > span {
+    font-size: 10px;
+  }
+  .filters .filter-note {
+    grid-column: 1/-1;
+    margin: 0;
+    font-size: 9px;
+  }
+  .filters .text-link {
+    justify-self: start;
+    font-size: 11px;
+  }
+  .filters .check-inline {
+    font-size: 11px;
+  }
+  .catalog-layout .product-grid {
+    gap: 24px 13px;
+  }
+  .catalog-top {
+    font-size: 10px;
+  }
+  .catalog-top select {
+    font-size: 12px;
+    max-width: 160px;
+  }
+  .product-detail {
+    grid-template-columns: 1fr;
+    gap: 25px;
+    padding-bottom: 35px;
+  }
+  .detail-photo {
+    aspect-ratio: 4/4.5;
+    max-height: 530px;
+  }
+  .detail-copy h1 {
+    font-size: 37px;
+  }
+  .detail-copy .description {
+    font-size: 12px;
+  }
+  .detail-copy .product-price strong {
+    font-size: 30px;
+  }
+  .form-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding-bottom: 35px;
+  }
+  .order-summary {
+    position: static;
+  }
+  .form-grid {
+    gap: 16px 12px;
+  }
+  .field > span,
+  .field > label {
+    font-size: 10px;
+  }
+  input:not([type="checkbox"]):not([type="file"]),
+  select,
+  textarea {
+    font-size: 16px;
+    padding: 11px 10px;
+  }
+  .panel-card {
+    padding: 20px;
+  }
+  .panel-card h2 {
+    font-size: 14px;
+  }
+  .panel-card + .panel-card {
+    margin-top: 16px;
+  }
+  .notice {
+    font-size: 11px;
+    padding: 13px 15px;
+  } /* Área demonstrativa do cliente e seus históricos. */
+  .account-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .account-sidebar {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 46px 1fr;
+    column-gap: 13px;
+  }
+  .account-sidebar .avatar {
+    grid-row: 1/3;
+    margin: 0;
+  }
+  .account-sidebar h2 {
+    margin: 4px 0;
+  }
+  .account-sidebar > p {
+    margin: 0;
+  }
+  .account-sidebar .field,
+  .account-sidebar .notice {
+    grid-column: 1/-1;
+    margin-top: 15px;
+  }
+  .account-sidebar .field select {
+    font-size: 16px;
+  }
+  .account-tabs {
+    margin-top: 20px;
+  }
+  .order-card {
+    padding: 19px;
+  }
+  .order-card-top {
+    gap: 8px;
+  }
+  .order-card-top /* Cores dos estados do pedido; a permissão para alterá-los não depende do CSS. */
+.status {
+    font-size: 9px;
+  }
+  .order-card-bottom {
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  .order-card-total {
+    margin-left: auto;
+  }
+  .order-card-bottom .button {
+    width: 100%;
+  }
+  .order-columns {
+    grid-template-columns: 1fr;
+    padding-bottom: 35px;
+  }
+  .order-heading h1 {
+    font-size: 28px;
+  }
+  .order-heading {
+    flex-wrap: wrap;
+  }
+  .order-heading .status {
+    font-size: 10px;
+  }
+  .stat-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .stat-card {
+    padding: 17px;
+  } /* Painel de acompanhamento, indicadores, busca e históricos por cliente. */
+  .admin-intro {
+    align-items: flex-start;
+  }
+  .admin-intro h1 {
+    font-size: 31px;
+  }
+  .admin-intro .button {
+    padding: 10px;
+    font-size: 10px;
+    min-height: 40px;
+  }
+  .admin-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .customers {
+    padding: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+  }
+  .customers h2 {
+    width: 100%;
+    margin-bottom: 7px;
+  }
+  .customer-button {
+    width: auto;
+    flex: 1;
+    min-width: 120px;
+    margin: 0;
+    padding: 10px;
+    font-size: 11px;
+    border: 1px solid var(--line);
+  }
+  .customer-button small {
+    font-size: 9px;
+  }
+  .admin-orders {
+    padding: 16px;
+  }
+  .table-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .table-toolbar select {
+    width: 100%;
+    font-size: 16px;
+  }
+  .orders-table {
+    min-width: 560px;
+  }
+  .step-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin: 25px 0;
+  }
+  .step-card {
+    padding: 24px;
+  }
+  .step-number {
+    font-size: 30px;
+    margin-bottom: 13px;
+  }
+  .step-card h2 {
+    font-size: 25px;
+  }
+  .faq {
+    padding-bottom: 35px;
+  } /* Prévia da mensagem antes de abrir o WhatsApp manualmente. */
+  .message-dialog {
+    padding: 23px;
+  }
+  .message-dialog textarea {
+    font-size: 13px;
+  }
+  .dialog-actions {
+    flex-direction: column;
+  }
+  .dialog-actions .button {
+    width: 100%;
+  }
+  .success-heading {
+    align-items: flex-start;
+  }
+  .success-heading p {
+    font-size: 11px;
+  } /* Avisos de resultado: o atributo role no HTML anuncia a mensagem. */
+  .toast {
+    bottom: 16px;
+    font-size: 11px;
+  }
+  .header-account .icon {
+    margin-right: 1px;
+  }
+}
+/* Acessibilidade: remove transições quando a pessoa solicita menos movimento. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *:before,
+  *:after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

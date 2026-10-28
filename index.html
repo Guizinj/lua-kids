@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#943e5a" />
+    <meta
+      name="description"
+      content="Prévia da Lua Kids: moda infantil no atacado, em grades fechadas. Caruaru, Pernambuco."
+    />
+    <title>Lua Kids · Moda infantil no atacado</title>
+    <link rel="icon" type="image/jpeg" href="recursos/imagens/logo-original.jpg" />
+    <!-- A ordem preserva a cascata visual da primeira versão. -->
+    <link rel="stylesheet" href="estilos/base.css" />
+    <link rel="stylesheet" href="estilos/estrutura.css" />
+    <link rel="stylesheet" href="estilos/vitrine.css" />
+    <link rel="stylesheet" href="estilos/rodape.css" />
+    <link rel="stylesheet" href="estilos/paginas.css" />
+    <link rel="stylesheet" href="estilos/responsivo.css" />
+    <!-- defer mantém a ordem: configuração → serviços/componentes → telas → eventos → aplicação. -->
+    <!-- Scripts tradicionais permitem continuar abrindo este arquivo diretamente no navegador. -->
+    <script defer src="js/configuracao.js"></script>
+    <script defer src="js/utilitarios.js"></script>
+    <script defer src="js/dados/demonstracao.js"></script>
+    <script defer src="js/servicos/armazenamento.js"></script>
+    <script defer src="js/navegacao.js"></script>
+    <script defer src="js/componentes/icones.js"></script>
+    <script defer src="js/componentes/avisos.js"></script>
+    <script defer src="js/componentes/comuns.js"></script>
+    <script defer src="js/servicos/sacola.js"></script>
+    <script defer src="js/componentes/estrutura.js"></script>
+    <script defer src="js/componentes/cartao-produto.js"></script>
+    <script defer src="js/paginas/inicio.js"></script>
+    <script defer src="js/paginas/catalogo.js"></script>
+    <script defer src="js/paginas/produto.js"></script>
+    <script defer src="js/paginas/sacola.js"></script>
+    <script defer src="js/servicos/favoritos.js"></script>
+    <script defer src="js/paginas/favoritos.js"></script>
+    <script defer src="js/servicos/entrega.js"></script>
+    <script defer src="js/servicos/pedidos.js"></script>
+    <script defer src="js/paginas/fechamento.js"></script>
+    <script defer src="js/servicos/anexos.js"></script>
+    <script defer src="js/paginas/pedidos.js"></script>
+    <script defer src="js/paginas/painel.js"></script>
+    <script defer src="js/componentes/mensagem-whatsapp.js"></script>
+    <script defer src="js/paginas/como-comprar.js"></script>
+    <script defer src="js/eventos.js"></script>
+    <script defer src="js/aplicacao.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+    <div class="announcement"
+      ><span>Atacado em grades fechadas <b>·</b> Pedido mínimo de 10 peças</span
+      ><span class="announcement-delivery">Entrega grátis em Caruaru/PE</span></div
+    >
+    <!-- O componente estrutura.js preenche a marca, a busca e os contadores. -->
+    <header class="site-header" id="header"></header>
+    <div class="demo-bar"
+      ><span class="demo-dot"></span><strong>Prévia para avaliação</strong
+      ><span
+        >Produtos, valores e pedidos ilustrativos. Nenhuma compra real será efetuada.</span
+      ></div
+    >
+    <!-- aplicacao.js troca somente esta área ao navegar pelas rotas. -->
+    <main id="conteudo" tabindex="-1"></main>
+    <footer class="site-footer" id="footer"></footer>
+    <!-- Diálogos nativos: o navegador controla foco e fechamento pelo teclado. -->
+    <dialog id="cart-dialog" class="cart-dialog" aria-labelledby="cart-title"></dialog>
+    <dialog id="message-dialog" class="message-dialog" aria-labelledby="message-title"></dialog>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <noscript
+      ><p class="container notice"
+        >Ative o JavaScript para navegar no catálogo e experimentar o carrinho.</p
+      ></noscript
+    >
+  </body>
+</html>

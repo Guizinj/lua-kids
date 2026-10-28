@@ -1,0 +1,192 @@
+/* Faixa de atacado, cabeçalho fixo, busca, navegação e aviso de demonstração. */
+.announcement {
+  min-height: 34px;
+  background: var(--rose);
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px max(40px, calc((100% - 1240px) / 2));
+  font-size: 11px;
+  letter-spacing: 0.035em;
+  gap: 12px;
+}
+.announcement b {
+  padding: 0 8px;
+  font-weight: 400;
+}
+.site-header {
+  background: #fffefa;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  border-bottom: 1px solid var(--line);
+}
+.header-main {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  min-height: 96px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.brand-seal {
+  position: relative;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid #e4d4cf;
+  background: #faf5ef;
+}
+.brand-seal img {
+  position: absolute;
+  width: 153%;
+  max-width: none;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.brand-name {
+  font-family: Georgia, serif;
+  font-size: 33px;
+  color: var(--rose);
+  letter-spacing: -0.045em;
+  line-height: 1;
+}
+.brand-name small {
+  display: block;
+  font:
+    9px "Segoe UI",
+    Arial,
+    sans-serif;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #9b7576;
+  margin-top: 6px;
+}
+.header-search {
+  position: relative;
+  max-width: 420px;
+  flex: 1;
+  margin-left: auto;
+}
+.header-search input {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: #faf8f5;
+  border-radius: 50px;
+  padding: 13px 45px 13px 19px;
+  font-size: 13px;
+}
+.header-search button {
+  position: absolute;
+  right: 6px;
+  top: 4px;
+}
+.header-actions {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  min-height: 44px;
+  border: 0;
+  background: transparent;
+  border-radius: 50%;
+  position: relative;
+  color: var(--ink);
+  gap: 8px;
+}
+.icon-button:hover {
+  background: var(--blush);
+  color: var(--rose);
+}
+.header-account {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 1.4;
+}
+.header-account small {
+  color: var(--muted);
+  display: block;
+  font-size: 10px;
+}
+.count-badge {
+  position: absolute;
+  right: 0;
+  top: 1px;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border-radius: 20px;
+  background: var(--rose);
+  color: white;
+  font-size: 10px;
+  display: grid;
+  place-items: center;
+}
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  min-height: 43px;
+  font-size: 12px;
+}
+.header-nav a {
+  padding: 12px 0;
+  white-space: nowrap;
+}
+.header-nav a:hover,
+.header-nav .active {
+  color: var(--rose);
+}
+.header-nav a.active {
+  box-shadow: inset 0 -2px var(--rose);
+}
+.header-nav .admin-link {
+  margin-left: auto;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 11px;
+  color: var(--muted);
+}
+.demo-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #f4f0e5;
+  color: #7c6b43;
+  padding: 9px 20px;
+  font-size: 10px;
+  line-height: 1.5;
+}
+.demo-dot {
+  width: 5px;
+  height: 5px;
+  background: #aa8d4c;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.demo-bar strong {
+  font-weight: 600;
+  white-space: nowrap;
+}
+main {
+  min-height: 50vh;
+}
+main:focus {
+  outline: none;
+}

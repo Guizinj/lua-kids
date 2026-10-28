@@ -1,0 +1,49 @@
+/* Rodapé com marca, atendimento, navegação e reinício dos exemplos. */
+.site-footer {
+  background: #f4ebe6;
+  border-top: 1px solid #eadcd5;
+  padding-top: 40px;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 1fr;
+  gap: 45px;
+  padding-bottom: 32px;
+}
+.footer-grid p {
+  font-size: 11px;
+  color: #8d7877;
+  max-width: 260px;
+  margin-top: 18px;
+}
+.footer-title {
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: 17px;
+}
+.footer-links {
+  display: grid;
+  gap: 12px;
+  font-size: 11px;
+  color: #857171;
+}
+.footer-links a:hover {
+  color: var(--rose);
+}
+.footer-bottom {
+  border-top: 1px solid #e8dcd5;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 0;
+  font-size: 10px;
+  color: #9b8683;
+}
+.footer-bottom button {
+  font: inherit;
+  border: 0;
+  padding: 0;
+  background: none;
+  text-decoration: underline;
+  color: inherit;
+}
