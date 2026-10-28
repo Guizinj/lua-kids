@@ -201,8 +201,8 @@
         ? LuaKids.painelFiltros.aplicarFiltros(true)
         : navegar('catalogo'),
     customer: (botao) => {
-      const id = botao.dataset.id;
-      navegar('painel' + (id ? '?cliente=' + encodeURIComponent(id) : ''));
+      botao.focus({ preventScroll: true });
+      painel.filtrarPorCliente(botao.dataset.id);
     },
     status: atualizarStatus,
     message: (botao) => whatsapp.mostrarMensagemWhatsApp(botao.dataset.id, botao.dataset.kind),

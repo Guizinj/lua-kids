@@ -37,15 +37,8 @@
     const selected = lerRota().params.get('cliente') || '';
     return /* HTML */ `<div class="container"
       ><div class="page-heading"
-        >${montarCaminho([['Painel demonstrativo']])}<div class="admin-intro"
-          ><div
-            ><p class="eyebrow">Lua Kids · Acompanhamento</p><h1>Cada pedido, mais perto.</h1
-            ><p
-              >Consulte o histórico dos clientes, confirme pedidos e compartilhe os comprovantes
-              de despacho.</p
-            ></div
-          ><a class="button secondary small" href="#/">Ver loja ${montarIcone('arrow')}</a></div
-        ><div class="notice"
+        >${montarCaminho([['Painel demonstrativo']])}
+        <div class="notice"
           >Painel de demonstração aberto, sem autenticação. Use somente dados fictícios.
           Cadastro de produtos e edição manual do estoque ficam para uma etapa futura.</div
         ><div class="stat-grid"
@@ -68,11 +61,12 @@
             class="customer-button ${!selected ? 'active' : ''}"
             data-action="customer"
             data-id=""
+            aria-pressed="${!selected}"
             >Todos os clientes<small>${all.length} perfis de demonstração</small></button
           >${all
             .map(
               (c) =>
-                `<button class="customer-button ${selected === c.id ? 'active' : ''}" data-action="customer" data-id="${escaparHTML(c.id)}">${escaparHTML(c.name)}<small>${obterEstado().orders.filter((o) => o.customer.id === c.id).length} pedidos · ${escaparHTML(c.phone)}</small></button>`,
+                `<button class="customer-button ${selected === c.id ? 'active' : ''}" data-action="customer" data-id="${escaparHTML(c.id)}" aria-pressed="${selected === c.id}">${escaparHTML(c.name)}<small>${obterEstado().orders.filter((o) => o.customer.id === c.id).length} pedidos · ${escaparHTML(c.phone)}</small></button>`,
             )
             .join('')}</aside
         ><section class="admin-orders" aria-label="Pedidos"
@@ -95,6 +89,21 @@
   }
 
   /**
+   * Trocar de cliente é um filtro local, não uma navegação entre páginas. Atualiza
+   * somente o parâmetro correspondente e a tabela, preservando os campos e o foco.
+   * replaceState também mantém a seleção ao reabrir ou compartilhar a URL.
+   */
+  function filtrarPorCliente(id) {
+    if (!selecionar('#admin-table')) return;
+    const { params } = lerRota();
+    if ((params.get('cliente') || '') === id) return;
+    if (id) params.set('cliente', id);
+    else params.delete('cliente');
+    history.replaceState(null, '', '#/painel' + (params.size ? '?' + params.toString() : ''));
+    atualizarTabelaPedidos();
+  }
+
+  /**
    * Filtra os pedidos por cliente, busca e status e atualiza apenas a tabela. O formulário de
    * filtros permanece no DOM para não perder a digitação.
    */
@@ -104,6 +113,12 @@
     const q = normalizarTexto(selecionar('#admin-search').value);
     const filter = selecionar('#admin-status').value;
     const selected = lerRota().params.get('cliente');
+    document.querySelectorAll('.customers [data-action="customer"]').forEach((botao) => {
+      const ativo = botao.dataset.id === (selected || '');
+      botao.classList.toggle('active', ativo);
+      botao.setAttribute('aria-pressed', String(ativo));
+    });
+    const posicaoHorizontal = root.scrollLeft;
     const orders = obterEstado().orders.filter(
       (o) =>
         (!selected || o.customer.id === selected) &&
@@ -120,6 +135,8 @@
           'Nenhum pedido encontrado.',
           'Altere a busca, o status ou o cliente selecionado.',
         );
+    // A tabela pode trocar de tamanho; o navegador limita a posição à largura disponível.
+    root.scrollLeft = posicaoHorizontal;
   }
-  LuaKids.painel = { montarPainel, atualizarTabelaPedidos };
+  LuaKids.painel = { montarPainel, atualizarTabelaPedidos, filtrarPorCliente };
 })();

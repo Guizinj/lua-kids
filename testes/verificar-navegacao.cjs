@@ -840,6 +840,71 @@ const errors = [],
     );
     await click('[data-action=dialogo-voltar]');
   }
+  // Selecionar um cliente filtra a tabela, sem remontar a página nem perder filtros.
+  for (const largura of [390, 1440]) {
+    await cdp('Emulation.setDeviceMetricsOverride', {
+      width: largura, height: 700, deviceScaleFactor: 1, mobile: largura < 760,
+    });
+    await route('painel?origem=teste');
+    await evaluate(`(()=>{
+      window.scrollTo({top:150,behavior:'instant'});
+      const tabela=document.querySelector('#admin-table');
+      tabela.scrollLeft=70;
+      window.referenciaPainel={
+        conteudo:document.querySelector('#conteudo').firstElementChild,
+        busca:document.querySelector('#admin-search'),
+        status:document.querySelector('#admin-status'),
+        topo:scrollY, lateral:tabela.scrollLeft, historico:history.length
+      };
+    })()`);
+    await check('referenciaPainel.topo>0', 'teste do filtro começa com a página rolada');
+    await click('[data-action=customer][data-id=demo-beatriz]');
+    await check(`(()=>{
+      const botao=document.querySelector('[data-action=customer][data-id=demo-beatriz]');
+      const tabela=document.querySelector('#admin-table');
+      return scrollY===referenciaPainel.topo &&
+        tabela.scrollLeft===referenciaPainel.lateral &&
+        document.querySelector('#conteudo').firstElementChild===referenciaPainel.conteudo &&
+        document.querySelector('#admin-search')===referenciaPainel.busca &&
+        document.querySelector('#admin-status')===referenciaPainel.status &&
+        document.activeElement===botao && botao.getAttribute('aria-pressed')==='true' &&
+        document.querySelectorAll('.customer-button.active').length===1 &&
+        tabela.querySelectorAll('tbody tr').length===1 && tabela.textContent.includes('Beatriz') &&
+        new URLSearchParams(location.hash.split('?')[1]).get('cliente')==='demo-beatriz' &&
+        new URLSearchParams(location.hash.split('?')[1]).get('origem')==='teste' &&
+        history.length===referenciaPainel.historico;
+    })()`, 'cliente muda sem remontar, perder foco ou rolagem em ' + largura);
+    await evaluate('window.tabelaAnterior=document.querySelector("#admin-table").firstElementChild');
+    await click('[data-action=customer][data-id=demo-beatriz]');
+    await check(
+      'document.querySelector("#admin-table").firstElementChild===tabelaAnterior && scrollY===referenciaPainel.topo',
+      'repetir o cliente selecionado não refaz a tabela',
+    );
+    await set('#admin-search', 'LK-DEMO', 'input');
+    await set('#admin-status', 'aguardando');
+    await check('!!document.querySelector("#admin-table .empty-state")', 'filtros combinados respeitam o cliente');
+    await click('[data-action=customer][data-id=demo-ana]');
+    await check(
+      'document.querySelector("#admin-search").value==="LK-DEMO" && document.querySelector("#admin-status").value==="aguardando" && document.querySelectorAll("#admin-table tbody tr").length===1 && document.querySelector("#admin-table").textContent.includes("Ana")',
+      'trocar cliente preserva busca e status em ' + largura,
+    );
+    await click('[data-action=customer][data-id=""]');
+    await check(
+      '!new URLSearchParams(location.hash.split("?")[1]).has("cliente") && new URLSearchParams(location.hash.split("?")[1]).get("origem")==="teste" && document.querySelector("#admin-search").value==="LK-DEMO" && document.querySelector("#admin-status").value==="aguardando" && document.querySelectorAll("#admin-table tbody tr").length===1 && document.querySelector(".customer-button.active").dataset.id==="" && document.querySelector(".customer-button.active").getAttribute("aria-pressed")==="true"',
+      'Todos os clientes remove somente o filtro de cliente',
+    );
+    await set('#admin-search', '', 'input');
+    await set('#admin-status', '');
+    await check('document.querySelectorAll("#admin-table tbody tr").length===3', 'lista completa recuperada sem navegação');
+    await click('[data-action=customer][data-id=demo-beatriz]');
+    await cdp('Page.reload');
+    await delay(250);
+    await ready();
+    await check(
+      'document.querySelector("[data-action=customer][data-id=demo-beatriz]").getAttribute("aria-pressed")==="true" && document.querySelectorAll("#admin-table tbody tr").length===1',
+      'URL recupera o cliente selecionado ao reabrir',
+    );
+  }
   if (errors.length) throw new Error('Erros de runtime: ' + JSON.stringify(errors));
   if (badResponses.length)
     throw new Error('Recursos faltando: ' + JSON.stringify(badResponses));
