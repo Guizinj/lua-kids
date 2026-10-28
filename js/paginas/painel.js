@@ -41,13 +41,13 @@
           ><div
             ><p class="eyebrow">Lua Kids · Acompanhamento</p><h1>Cada pedido, mais perto.</h1
             ><p
-              >Consulte o histórico dos clientes, confirme pedidos e compartilhe os comprovantes de
-              despacho.</p
+              >Consulte o histórico dos clientes, confirme pedidos e compartilhe os comprovantes
+              de despacho.</p
             ></div
           ><a class="button secondary small" href="#/">Ver loja ${montarIcone('arrow')}</a></div
         ><div class="notice"
-          >Painel de demonstração aberto, sem autenticação. Use somente dados fictícios. Cadastro de
-          produtos e edição manual do estoque ficam para uma etapa futura.</div
+          >Painel de demonstração aberto, sem autenticação. Use somente dados fictícios.
+          Cadastro de produtos e edição manual do estoque ficam para uma etapa futura.</div
         ><div class="stat-grid"
           >${[
             ['Pedidos no histórico', obterEstado().orders.length],
@@ -114,7 +114,7 @@
           ).includes(q)),
     );
     root.innerHTML = orders.length
-      ? `<table class="orders-table"><thead><tr><th scope="col">Pedido / data</th><th scope="col">Cliente</th><th scope="col">Status</th><th scope="col">Produtos</th><th scope="col"><span class="visually-hidden">Detalhes</span></th></tr></thead><tbody>${orders.map((o) => `<tr><td><a href="#/painel/pedido/${escaparHTML(o.id)}">${escaparHTML(o.id)}</a><small>${formatarData(o.createdAt)}</small></td><td>${escaparHTML(o.customer.name)}<small>${escaparHTML(o.customer.city)}/${escaparHTML(o.customer.uf)}</small></td><td>${montarEtiquetaStatus(o.status)}</td><td>${formatarDinheiro(o.total)}<small>${o.pieces} peças</small></td><td><a href="#/painel/pedido/${escaparHTML(o.id)}" aria-label="Abrir pedido ${escaparHTML(o.id)}">Abrir →</a></td></tr>`).join('')}</tbody></table>`
+      ? `<table class="orders-table"><thead><tr><th scope="col">Pedido / data</th><th scope="col">Cliente</th><th scope="col">Status</th><th scope="col">Produtos</th><th scope="col"><span class="visually-hidden">Detalhes</span></th></tr></thead><tbody>${orders.map((o) => `<tr><td data-label="Pedido / data"><a href="#/painel/pedido/${escaparHTML(o.id)}">${escaparHTML(o.id)}</a><small>${formatarData(o.createdAt)}</small></td><td data-label="Cliente">${escaparHTML(o.customer.name)}<small>${escaparHTML(o.customer.city)}/${escaparHTML(o.customer.uf)}</small></td><td data-label="Status">${montarEtiquetaStatus(o.status)}</td><td data-label="Produtos">${formatarDinheiro(o.total)}<small>${o.pieces} peças</small></td><td data-label=""><a href="#/painel/pedido/${escaparHTML(o.id)}" aria-label="Abrir pedido ${escaparHTML(o.id)}">Abrir →</a></td></tr>`).join('')}</tbody></table>`
       : montarEstadoVazio(
           'search',
           'Nenhum pedido encontrado.',

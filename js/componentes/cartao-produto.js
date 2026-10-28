@@ -42,7 +42,9 @@
           : ''}</p
       ><h3 class="product-title"><a href="#/produto/${p.id}">${escaparHTML(p.name)}</a></h3
       ><p class="product-meta"
-        >Grade ${p.sizes.length} peças · ${escaparHTML(p.sizes.join(' / '))}<br />Cores sortidas</p
+        >Grade ${p.sizes.length} peças · ${escaparHTML(p.sizes.join(' / '))}</p
+      >${LuaKids.cores.montarCores(p.colors, true)}<p class="aviso-cores"
+        >Cores sortidas; podem variar conforme disponibilidade.</p
       ><div class="product-price"
         ><strong>${formatarDinheiro(p.price)} <small>/ grade</small></strong
         ><button

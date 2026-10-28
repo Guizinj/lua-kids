@@ -17,6 +17,7 @@
       copia.favorites = copia.favorites.includes(id)
         ? copia.favorites.filter((item) => item !== id)
         : [...copia.favorites, id];
+      copia.favoritesByCustomer[LuaKids.contas.chavePerfil(copia)] = [...copia.favorites];
     });
     return obterEstado().favorites.includes(id);
   }

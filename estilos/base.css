@@ -1,5 +1,17 @@
 /* Cores, tipografia, dimensões gerais, ícones e acessibilidade compartilhada. */
+/* Nunito local para títulos: não exige conexão com Google Fonts ao abrir a loja.
+ * O arquivo variável atende aos pesos 700 e 800 e inclui os acentos do português.
+ * Licença e origem estão em recursos/fontes/. O restante da interface usa Segoe UI.
+ */
+@font-face {
+  font-family: "Nunito";
+  font-style: normal;
+  font-weight: 700 800;
+  font-display: swap;
+  src: url("../recursos/fontes/nunito-latino.woff2") format("woff2");
+}
 :root {
+  --fonte-titulos: "Nunito", "Segoe UI", Arial, sans-serif;
   --ink: #352c30;
   --muted: #7c7074;
   --rose: #943e5a;
@@ -19,8 +31,24 @@
 * {
   box-sizing: border-box;
 }
+/* A rolagem lateral pertence aos componentes (tabela, menu e carrossel),
+ * nunca ao documento. clip preserva o cabeçalho sticky e a rolagem vertical.
+ * hidden é a alternativa para navegadores que ainda não reconhecem clip.
+ */
+html {
+  overflow-x: hidden;
+  overflow-x: clip;
+  overscroll-behavior-x: none;
+}
 body {
   margin: 0;
+  width: 100%;
+  min-width: 0;
+  overflow-x: clip;
+}
+#conteudo {
+  min-width: 0;
+  max-width: 100%;
 }
 button,
 input,
@@ -74,20 +102,22 @@ p {
 h1,
 h2,
 .serif {
-  font-family: Georgia, "Times New Roman", serif;
-  font-weight: 400;
+  font-family: var(--fonte-titulos);
+  font-weight: 800;
 }
 h1 {
   font-size: clamp(36px, 4vw, 58px);
-  letter-spacing: -0.04em;
-  line-height: 1.12;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
 }
 h2 {
   font-size: clamp(29px, 3vw, 40px);
-  letter-spacing: -0.035em;
-  line-height: 1.15;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
 }
 h3 {
+  font-family: var(--fonte-titulos);
+  font-weight: 700;
   font-size: 17px;
   line-height: 1.4;
 }

@@ -58,6 +58,10 @@ Esse encapsulamento organiza dependências. **Não é uma barreira de segurança
 - As imagens foram movidas para `recursos/imagens/`. O utilitário traduz os identificadores antigos (`dress`, `set` etc.) para os arquivos em português, mantendo os pedidos salvos compatíveis.
 - O armazenamento local simula gravação por cópia, mas não implementa transações concorrentes, autenticação ou sincronização entre dispositivos.
 
+Na revisão de celular, `js/servicos/contas.js` passou a organizar os dados por cliente. `favoritesByCustomer`, `addressesByCustomer` e `draftsByCustomer` são os mapas persistidos; `favorites` e `checkoutDraft` mantêm a projeção do perfil ativo. A migração acontece ao carregar o estado, uma única vez por revisão. Pedidos antigos continuam com suas cópias históricas. Cores e tecido são copiados somente para novos pedidos.
+
+Novos componentes reutilizáveis: cores, menu, painel de filtros, depoimentos e diálogos HTML de confirmação. A página de endereço edita somente o endereço da conta demonstrativa. Filtros no celular usam os mesmos campos do computador, movidos para o diálogo e restaurados ao fechar; não existem dois formulários com IDs repetidos.
+
 ## Estilos e recursos
 
 O CSS deixou de ser compacto e foi separado, preservando sua ordem de aplicação:
@@ -68,6 +72,7 @@ O CSS deixou de ser compacto e foi separado, preservando sua ordem de aplicaçã
 4. `estilos/rodape.css`: atendimento e navegação inferior.
 5. `estilos/paginas.css`: catálogo e demais telas internas, diálogos e painel.
 6. `estilos/responsivo.css`: adaptações por largura e redução de movimento.
+7. `estilos/ajustes-previa.css`: cores informativas, menu, filtros móveis, confirmações, endereço, depoimentos e contenção da rolagem da tabela de pedidos no celular. A tabela mantém rolagem horizontal interna; a página inteira não deve rolar para os lados.
 
 Os seletores existentes foram mantidos para preservar a apresentação. Para detalhes de imagens e seus prompts, consulte [IMAGENS-ILUSTRATIVAS.md](IMAGENS-ILUSTRATIVAS.md). O servidor opcional agora é executado por `node servidor.mjs`.
 
@@ -81,3 +86,7 @@ Verificado em 28/10/2026, com dados fictícios:
 - O teste de navegador mantém capturas na pasta temporária indicada ao terminar. Ele usa um perfil separado e não compartilha os dados do navegador pessoal.
 
 Essas evidências são de regressão funcional. Os controles de produção do guia de segurança permanecem pendentes; o login continua sem decisão final.
+
+O teste de navegador também exercita menu, filtros e cancelamento com eventos de toque do Chromium, sem `window.confirm`, além de isolamento entre perfis e endereço salvo. A revisão anterior está preservada conforme [RESTAURACAO.md](RESTAURACAO.md). A avaliação final no Safari/Chrome do aparelho do usuário continua necessária: emulação não equivale ao teste em aparelho físico.
+
+O teste abre uma segunda aba do cliente e confere a atualização de confirmado, em preparação, enviado, entregue e comprovante sem recarregamento. Isso verifica apenas o mecanismo local de `storage`, não Supabase Realtime ou isolamento de produção.

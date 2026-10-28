@@ -15,6 +15,7 @@ const types = {
   '.jpg': 'image/jpeg',
   '.jpeg': 'image/jpeg',
   '.svg': 'image/svg+xml',
+  '.woff2': 'font/woff2',
   '.md': 'text/plain; charset=utf-8',
 };
 const server = http.createServer(async (request, response) => {

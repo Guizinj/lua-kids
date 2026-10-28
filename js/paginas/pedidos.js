@@ -30,8 +30,9 @@
     const orders = obterEstado().orders.filter((o) => o.customer.id === profile.id);
     return /* HTML */ `<div class="container"
       ><div class="page-heading"
-        >${montarCaminho([['Meus pedidos']])}<h1>Bom ter você por aqui.</h1
-        ><p>Acompanhe os detalhes e o andamento dos seus pedidos em um só lugar.</p></div
+        >${montarCaminho([['Meus pedidos']])}<p
+          >Acompanhe os detalhes e o andamento dos seus pedidos em um só lugar.</p
+        ></div
       ><div class="account-layout"
         ><aside class="account-sidebar"
           ><div class="avatar">${escaparHTML(profile.name?.charAt(0) || 'L')}</div
@@ -40,6 +41,8 @@
           ><div class="notice"
             >Área demonstrativa, sem autenticação. A troca de cliente abaixo existe apenas para
             avaliar o protótipo.</div
+          ><a class="button secondary full atalho-endereco" href="#/endereco"
+            >${montarIcone('location')}<span>Meu endereço</span>${montarIcone('arrow')}</a
           ><label class="field"
             ><span>Simular outro cliente</span
             ><select id="demo-profile"
@@ -88,7 +91,8 @@
           >${order.items
             .slice(0, 3)
             .map(
-              (item) => `<img src="${caminhoImagem(item.image)}" alt="${escaparHTML(item.name)}">`,
+              (item) =>
+                `<img src="${caminhoImagem(item.image)}" alt="${escaparHTML(item.name)}">`,
             )
             .join('')}</div
         ><div class="order-card-total"
@@ -108,7 +112,10 @@
    * URLs dos formatos previstos; não representa acesso privado de produção.
    */
   function montarComprovante(order) {
-    if (!order.attachment || !/^data:image\/(png|jpeg|webp);base64,/.test(order.attachment.data))
+    if (
+      !order.attachment ||
+      !/^data:image\/(png|jpeg|webp);base64,/.test(order.attachment.data)
+    )
       return '<p class="small-print">O comprovante de despacho aparecerá aqui quando a loja anexar a imagem.</p>';
     return /* HTML */ `<img
         class="attachment-preview"
@@ -169,7 +176,8 @@
       ><div class="order-columns"
         ><div
           ><section class="panel-card"
-            ><h2>A sua seleção</h2>${montarResumoItens(order.items)}<div class="summary-row"
+            ><h2>A sua seleção</h2>${montarResumoItens(order.items, { compacto: true })}<div
+              class="summary-row"
               ><span>Entrega</span
               ><span
                 >${order.delivery.fee === 0
@@ -212,7 +220,10 @@
             ><h2>${admin ? 'Acompanhar este pedido' : 'Fale com a loja'}</h2>${admin
               ? `<div class="notice" style="margin-bottom:18px">Painel demonstrativo sem login. As ações alteram apenas os dados deste navegador.</div><div class="admin-actions">${nextStatus ? `<button class="button" data-action="status" data-id="${escaparHTML(order.id)}" data-status="${nextStatus[0]}">${escaparHTML(nextStatus[1])}</button>` : ''}<button class="button secondary" data-action="message" data-id="${escaparHTML(order.id)}" data-kind="shipping">${montarIcone('chat')} Preparar aviso pelo WhatsApp</button>${canCancel ? `<button class="button danger" data-action="status" data-id="${escaparHTML(order.id)}" data-status="cancelado">Cancelar pedido</button>` : ''}</div><p class="small-print">Ao confirmar, as grades são reservadas. Cancelar um pedido confirmado ou em preparação devolve a reserva ao estoque demonstrativo.</p>`
               : `<p class="small-print" style="margin:0 0 17px">O pagamento e o transporte são combinados pelo atendimento. Você pode preparar uma mensagem com os detalhes desta demonstração.</p><button class="button full" data-action="message" data-id="${escaparHTML(order.id)}" data-kind="order">${montarIcone('chat')} Prévia para WhatsApp</button>`}</section
-          ><a class="text-link" href="${admin ? '#/painel' : '#/pedidos'}" style="margin-top:18px"
+          ><a
+            class="text-link"
+            href="${admin ? '#/painel' : '#/pedidos'}"
+            style="margin-top:18px"
             >${montarIcone('back')} Voltar para ${admin ? 'o painel' : 'meus pedidos'}</a
           ></aside
         ></div

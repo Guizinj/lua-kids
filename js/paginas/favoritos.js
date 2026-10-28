@@ -19,8 +19,7 @@
     const favorites = produtos.filter((p) => obterEstado().favorites.includes(p.id));
     return /* HTML */ `<div class="container bottom-space"
       ><div class="page-heading"
-        >${montarCaminho([['Favoritos']])}<h1>Guardados com carinho.</h1
-        ><p
+        >${montarCaminho([['Favoritos']])}<p
           >Seus modelos favoritos ficam salvos neste navegador para você voltar quando quiser.</p
         ></div
       ><div class="product-grid"

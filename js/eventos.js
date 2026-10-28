@@ -6,6 +6,7 @@
  */
 (() => {
   'use strict';
+  const LuaKids = window.LuaKids;
 
   const {
     utilitarios,
@@ -66,9 +67,17 @@
     const selecionado = favoritos.alternarFavorito(id);
     estrutura.renderizarCabecalho();
     const posicao = window.scrollY;
+    const posicaoCarrossel = selecionar('#lista-mais-vendidos')?.scrollLeft;
     renderizarPagina(false);
+    const carrossel = selecionar('#lista-mais-vendidos');
+    if (carrossel && posicaoCarrossel !== undefined) {
+      carrossel.scrollLeft = posicaoCarrossel;
+      LuaKids.maisVendidos.atualizarControles();
+    }
     window.scrollTo(0, posicao);
-    mostrarAviso(selecionado ? 'Modelo guardado nos favoritos.' : 'Modelo removido dos favoritos.');
+    mostrarAviso(
+      selecionado ? 'Modelo guardado nos favoritos.' : 'Modelo removido dos favoritos.',
+    );
   }
 
   /**
@@ -76,21 +85,29 @@
    */
   function atualizarStatus(botao) {
     const novoStatus = botao.dataset.status;
-    if (
-      novoStatus === 'cancelado' &&
-      !window.confirm(
-        'Cancelar este pedido de demonstração? As grades reservadas serão devolvidas ao estoque.',
-      )
-    ) {
+    const aplicar = () => {
+      pedidos.alterarStatusPedido(botao.dataset.id, novoStatus);
+      renderizarPagina(false);
+      mostrarAviso(
+        novoStatus === 'confirmado'
+          ? 'Pedido confirmado e estoque reservado nesta demonstração.'
+          : novoStatus === 'cancelado'
+            ? 'Pedido cancelado. A reserva existente foi devolvida.'
+            : 'Status atualizado no pedido do cliente.',
+      );
+    };
+    if (novoStatus === 'cancelado') {
+      LuaKids.dialogos.abrir({
+        titulo: 'Cancelar este pedido?',
+        texto:
+          'Esta ação cancela o pedido demonstrativo. Se houver grades reservadas, elas serão devolvidas ao estoque uma única vez.',
+        confirmar: 'Cancelar pedido',
+        perigo: true,
+        acao: aplicar,
+      });
       return;
     }
-    pedidos.alterarStatusPedido(botao.dataset.id, novoStatus);
-    renderizarPagina(false);
-    mostrarAviso(
-      novoStatus === 'confirmado'
-        ? 'Pedido confirmado e estoque reservado nesta demonstração.'
-        : 'Status atualizado no pedido do cliente.',
-    );
+    aplicar();
   }
 
   /**
@@ -116,24 +133,40 @@
    * Apaga apenas a demonstração da loja, mantendo o checklist da reunião separado.
    */
   function reiniciarDemonstracao() {
-    if (
-      !window.confirm(
-        'Reiniciar a demonstração? Isso apaga os pedidos de teste, anexos, favoritos e sacola deste protótipo, restaurando os exemplos iniciais. O checklist da reunião será preservado.',
-      )
-    ) {
-      return;
-    }
-    armazenamento.reiniciarDemonstracao();
-    estrutura.renderizarCabecalho();
-    navegar('');
-    mostrarAviso('Demonstração reiniciada.');
+    LuaKids.dialogos.abrir({
+      titulo: 'Reiniciar a demonstração?',
+      texto:
+        'Isso apaga os pedidos de teste, anexos, favoritos, endereços e sacola, restaurando os exemplos iniciais. O checklist da reunião será preservado.',
+      confirmar: 'Reiniciar',
+      perigo: true,
+      acao: () => {
+        armazenamento.reiniciarDemonstracao();
+        estrutura.renderizarCabecalho();
+        navegar('');
+        mostrarAviso('Demonstração reiniciada.');
+      },
+    });
   }
 
   /**
    * Mapa entre as intenções do HTML e os serviços/telas responsáveis por executá-las.
    */
   const acoesDeClique = {
+    'mais-vendidos-rolar': (botao) =>
+      LuaKids.maisVendidos.rolarMaisVendidos(Number(botao.dataset.step)),
+    'menu-abrir': () => LuaKids.menu.abrirMenu(),
+    'menu-fechar': () => LuaKids.menu.fecharMenu(),
+    'dialogo-voltar': () => LuaKids.dialogos.voltar(),
+    'dialogo-confirmar': () => LuaKids.dialogos.confirmar(),
+    'filtros-abrir': () => LuaKids.painelFiltros.abrirFiltros(),
+    'filtros-fechar': () => selecionar('#painel-filtros').close(),
+    'filtros-aplicar': () => LuaKids.painelFiltros.aplicarFiltros(),
+    'filtros-limpar': () => LuaKids.painelFiltros.aplicarFiltros(true),
+    'aviso-entrega': () => fechamento.mostrarAvisoEntrega(true),
+    'depoimentos-rolar': (botao) =>
+      LuaKids.depoimentos.rolarDepoimentos(Number(botao.dataset.step)),
     'cart-open': () => {
+      LuaKids.dialogos.fecharTodos();
       telaSacola.renderizarSacola();
       selecionar('#cart-dialog').showModal();
     },
@@ -163,7 +196,10 @@
       sacola.definirQuantidade(botao.dataset.id, 0);
       atualizarSacola();
     },
-    'clear-filters': () => navegar('catalogo'),
+    'clear-filters': () =>
+      selecionar('#painel-filtros').open
+        ? LuaKids.painelFiltros.aplicarFiltros(true)
+        : navegar('catalogo'),
     customer: (botao) => {
       const id = botao.dataset.id;
       navegar('painel' + (id ? '?cliente=' + encodeURIComponent(id) : ''));
@@ -172,10 +208,17 @@
     message: (botao) => whatsapp.mostrarMensagemWhatsApp(botao.dataset.id, botao.dataset.kind),
     'message-close': () => selecionar('#message-dialog').close(),
     'remove-attachment': (botao) => {
-      if (!window.confirm('Remover o comprovante de despacho deste pedido?')) return;
-      anexos.removerComprovante(botao.dataset.id);
-      renderizarPagina(false);
-      mostrarAviso('Anexo removido.');
+      LuaKids.dialogos.abrir({
+        titulo: 'Remover comprovante?',
+        texto: 'O comprovante de despacho deixará de aparecer neste pedido demonstrativo.',
+        confirmar: 'Remover anexo',
+        perigo: true,
+        acao: () => {
+          anexos.removerComprovante(botao.dataset.id);
+          renderizarPagina(false);
+          mostrarAviso('Anexo removido.');
+        },
+      });
     },
     reset: reiniciarDemonstracao,
   };
@@ -186,6 +229,14 @@
   function tratarClique(evento) {
     const botao = evento.target.closest('[data-action]');
     if (!botao) {
+      const linkMenu = evento.target.closest('#menu-lateral a');
+      if (linkMenu) LuaKids.menu.fecharMenu();
+      // Repetir um destino não dispara hashchange, por isso o menu fecha pelo clique.
+      const mesmoDestino = evento.target.closest('a[href^="#/"]');
+      if (mesmoDestino && mesmoDestino.hash === location.hash && !linkMenu) {
+        evento.preventDefault();
+        renderizarPagina();
+      }
       if (evento.target.closest('.skip-link')) {
         evento.preventDefault();
         selecionar('#conteudo').focus();
@@ -205,10 +256,22 @@
    */
   function tratarEnvio(evento) {
     const formulario = evento.target;
-    if (formulario.id === 'header-search') {
+    if (formulario.id === 'header-search' || formulario.id === 'menu-search') {
       evento.preventDefault();
       const busca = String(new FormData(formulario).get('q') || '').trim();
+      LuaKids.dialogos.fecharTodos();
+      catalogo.solicitarRolagem();
       navegar('catalogo' + (busca ? '?q=' + encodeURIComponent(busca) : ''));
+    }
+    if (formulario.id === 'formulario-endereco') {
+      evento.preventDefault();
+      if (!formulario.reportValidity()) return;
+      try {
+        LuaKids.contas.salvarEndereco(Object.fromEntries(new FormData(formulario)));
+        mostrarAviso('Endereço salvo para este perfil demonstrativo.');
+      } catch (erro) {
+        mostrarAviso(erro.message, true);
+      }
     }
     if (formulario.id === 'checkout-form') {
       evento.preventDefault();
@@ -247,6 +310,7 @@
       if (campo.id === 'admin-status') painel.atualizarTabelaPedidos();
       if (campo.id === 'demo-profile') {
         pedidos.selecionarCliente(campo.value);
+        estrutura.renderizarCabecalho();
         renderizarPagina(false);
       }
       if (campo.id === 'dispatch-file') receberComprovante(campo);
@@ -254,6 +318,7 @@
       if (formulario) {
         fechamento.atualizarAvisoEntrega();
         fechamento.salvarRascunho(formulario);
+        if (campo.name === 'uf') fechamento.mostrarAvisoEntrega();
       }
     } catch (erro) {
       mostrarAviso(erro.message, true);
@@ -267,11 +332,84 @@
   function registrarEventos() {
     document.addEventListener('click', tratarClique);
     document.addEventListener('submit', tratarEnvio);
+    // invalid não propaga: a captura abre os campos recolhidos antes de o navegador
+    // mostrar a mensagem e focalizar o primeiro erro. Não desativa a validação nativa.
+    document.addEventListener(
+      'invalid',
+      (evento) => {
+        const etapa = evento.target.closest('#checkout-form .etapa-fechamento');
+        if (etapa) etapa.open = true;
+      },
+      true,
+    );
     document.addEventListener('input', tratarDigitacao);
     document.addEventListener('change', tratarMudanca);
+    document.addEventListener(
+      'scroll',
+      (evento) => {
+        if (evento.target.id === 'lista-mais-vendidos')
+          LuaKids.maisVendidos.atualizarControles();
+      },
+      true,
+    );
+    window.addEventListener('resize', () => LuaKids.maisVendidos.atualizarControles(), {
+      passive: true,
+    });
+    document.addEventListener('focusout', (evento) => {
+      if (evento.target.matches('#checkout-form [name="city"]'))
+        fechamento.mostrarAvisoEntrega();
+    });
+    document.addEventListener('keydown', (evento) => {
+      if (
+        evento.key === 'Enter' &&
+        evento.target.id === 'catalog-search' &&
+        !evento.target.closest('#painel-filtros')
+      ) {
+        evento.preventDefault();
+        catalogo.atualizarFiltro(evento.target);
+        catalogo.rolarParaResultados();
+      }
+    });
+    // Mantém o fundo imóvel e o botão flutuante oculto durante qualquer diálogo.
+    const atualizarModais = () => {
+      const aberto = Boolean(document.querySelector('dialog[open]'));
+      document.documentElement.classList.toggle('modal-aberto', aberto);
+      selecionar('[data-action="menu-abrir"]')?.setAttribute(
+        'aria-expanded',
+        String(selecionar('#menu-lateral').open),
+      );
+    };
+    document.querySelectorAll('dialog').forEach((dialogo) => {
+      new MutationObserver(atualizarModais).observe(dialogo, {
+        attributes: true,
+        attributeFilter: ['open'],
+      });
+      dialogo.addEventListener('close', atualizarModais);
+      dialogo.addEventListener('click', (evento) => {
+        if (evento.target !== dialogo) return;
+        const retangulo = dialogo.getBoundingClientRect();
+        if (
+          evento.clientX < retangulo.left ||
+          evento.clientX > retangulo.right ||
+          evento.clientY < retangulo.top ||
+          evento.clientY > retangulo.bottom
+        )
+          dialogo.close();
+      });
+    });
+    matchMedia('(min-width: 761px)').addEventListener('change', (evento) => {
+      if (evento.matches) selecionar('#painel-filtros').close();
+    });
     window.addEventListener('hashchange', () => {
-      selecionar('#cart-dialog').close();
-      selecionar('#message-dialog').close();
+      const formularioAnterior = selecionar('#checkout-form');
+      if (formularioAnterior && formularioAnterior.dataset.enviado !== 'true') {
+        try {
+          fechamento.salvarRascunho(formularioAnterior);
+        } catch (erro) {
+          mostrarAviso(erro.message, true);
+        }
+      }
+      LuaKids.dialogos.fecharTodos();
       renderizarPagina();
     });
     window.addEventListener('storage', (evento) => {

@@ -43,7 +43,8 @@
    */
   function montarEstadoVazio(symbol, title, text, action = '') {
     return /* HTML */ `<div class="empty-state"
-      >${montarIcone(symbol)}<h2>${escaparHTML(title)}</h2><p>${escaparHTML(text)}</p>${action}</div
+      >${montarIcone(symbol)}<h2>${escaparHTML(title)}</h2
+      ><p>${escaparHTML(text)}</p>${action}</div
     >`;
   }
 
@@ -68,15 +69,40 @@
 
   /**
    * Monta a lista de valores por modelo. Aceita tanto itens atuais da sacola como as cópias
-   * de preço e composição preservadas em um pedido.
+   * de preço e composição preservadas em um pedido. A opção compacto, usada no fechamento
+   * e no histórico, mantém o essencial visível e recolhe tecido/cores do próprio item.
    */
-  function montarResumoItens(items) {
+  function montarResumoItens(items, { compacto = false } = {}) {
     return items
-      .map(
-        (item) =>
-          `<div class="summary-item"><img src="${caminhoImagem(item.image)}" alt=""><div><h3>${escaparHTML(item.name)}</h3><p>${item.quantity} ${item.quantity === 1 ? 'grade' : 'grades'} · ${item.quantity * item.sizes.length} peças</p></div><strong>${formatarDinheiro(item.price * item.quantity)}</strong></div>`,
+      .map((item) =>
+        compacto
+          ? montarItemPedidoCompacto(item)
+          : `<div class="summary-item"><img src="${caminhoImagem(item.image)}" alt=""><div><h3>${escaparHTML(item.name)}</h3><p>${item.quantity} ${item.quantity === 1 ? 'grade' : 'grades'} · ${item.quantity * item.sizes.length} peças</p>${LuaKids.cores.montarCaracteristicas(item, true)}</div><strong>${formatarDinheiro(item.price * item.quantity)}</strong></div>`,
       )
       .join('');
+  }
+
+  /** Resumo sem controles de edição: quantidades e valores vêm do item recebido. */
+  function montarItemPedidoCompacto(item) {
+    const nome = escaparHTML(item.name);
+    const temDetalhes = item.fabric || item.colors?.length;
+    return /* HTML */ `<div class="summary-item item-pedido-compacto">
+      <img src="${caminhoImagem(item.image)}" alt="" width="48" height="64" />
+      <div>
+        <h3>${nome}</h3>
+        <div class="item-pedido-valores">
+          <p
+            >${item.quantity} ${item.quantity === 1 ? 'grade' : 'grades'} ·
+            ${item.quantity * item.sizes.length} peças</p
+          >
+          <strong>${formatarDinheiro(item.price * item.quantity)}</strong>
+        </div>
+        <p class="item-pedido-tamanhos">Tamanhos: ${item.sizes.map(escaparHTML).join(' / ')}</p>
+        ${temDetalhes
+          ? `<details class="detalhes-item-pedido"><summary aria-label="Detalhes da grade de ${nome}">Detalhes da grade</summary>${LuaKids.cores.montarCaracteristicas(item, true, { mostrarTamanhos: false })}</details>`
+          : ''}
+      </div>
+    </div>`;
   }
 
   /**

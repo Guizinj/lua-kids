@@ -16,9 +16,7 @@
    * demonstrativo ativo. Não é autenticação: serve para testar históricos no protótipo.
    */
   function listarClientes() {
-    const map = new Map(obterEstado().orders.map((o) => [o.customer.id, o.customer]));
-    if (obterEstado().profile.id) map.set(obterEstado().profile.id, obterEstado().profile);
-    return [...map.values()];
+    return Object.values(obterEstado().customersById);
   }
 
   /**
@@ -54,7 +52,10 @@
       if (status === 'cancelado' && order.reserved) {
         for (const item of order.items) {
           next.stock[item.productId] += item.quantity;
-          next.sold[item.productId] = Math.max(0, (next.sold[item.productId] || 0) - item.quantity);
+          next.sold[item.productId] = Math.max(
+            0,
+            (next.sold[item.productId] || 0) - item.quantity,
+          );
         }
         order.reserved = false;
       }
@@ -74,15 +75,16 @@
       throw new Error('Informe um WhatsApp com DDD e 10 ou 11 dígitos.');
     const itens = listarItensSacola(),
       totais = calcularTotaisSacola();
-    if (totais.pieces < 10) throw new Error('O pedido mínimo é de 10 peças em grades completas.');
+    if (totais.pieces < 10)
+      throw new Error('O pedido mínimo é de 10 peças em grades completas.');
     for (const item of itens)
       if (item.quantity > obterEstado().stock[item.id])
         throw new Error(
           'O estoque de ' + item.name + ' mudou. Revise a sacola antes de continuar.',
         );
-    const conhecido = obterEstado().orders.find(
-      (pedido) => somenteDigitos(pedido.customer.phone) === telefone,
-    )?.customer;
+    const conhecido = listarClientes().find(
+      (cliente) => somenteDigitos(cliente.phone) === telefone,
+    );
     const cliente = { id: conhecido?.id || 'demo-' + telefone };
     for (const campo of [
       'name',
@@ -109,6 +111,8 @@
         price: item.price,
         sizes: [...item.sizes],
         image: item.image,
+        fabric: item.fabric,
+        colors: item.colors.map((cor) => ({ ...cor })),
         quantity: item.quantity,
       })),
       total: totais.total,
@@ -127,10 +131,16 @@
     alterarEstado((copia) => {
       copia.orders.unshift(pedido);
       copia.cart = {};
-      copia.profile = valores.saveAddress
-        ? { ...cliente }
-        : { id: cliente.id, name: cliente.name, phone: cliente.phone };
-      copia.checkoutDraft = {};
+      copia.draftsByCustomer[LuaKids.contas.chavePerfil(copia)] = {};
+      copia.customersById[cliente.id] = {
+        id: cliente.id,
+        name: cliente.name,
+        phone: cliente.phone,
+      };
+      if (valores.saveAddress)
+        copia.addressesByCustomer[cliente.id] = LuaKids.contas.extrairEndereco(cliente);
+      copia.draftsByCustomer[cliente.id] = {};
+      LuaKids.contas.projetarPerfil(copia, cliente);
     });
     return pedido.id;
   }
@@ -142,7 +152,7 @@
     const cliente = listarClientes().find((item) => item.id === id);
     if (cliente)
       alterarEstado((copia) => {
-        copia.profile = { ...cliente };
+        LuaKids.contas.projetarPerfil(copia, cliente);
       });
   }
 

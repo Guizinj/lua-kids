@@ -11,6 +11,18 @@
   const { lerRota } = LuaKids.navegacao;
   const { montarCaminho, montarEstadoVazio } = LuaKids.componentes;
   const { montarCartaoProduto } = LuaKids.cartaoProduto;
+  let rolagemSolicitada = false;
+
+  /** A busca global agenda a rolagem para depois que a nova rota montar os resultados. */
+  function solicitarRolagem() {
+    rolagemSolicitada = true;
+  }
+  function aplicarRolagemSolicitada() {
+    if (rolagemSolicitada && selecionar('#resultados-catalogo')) {
+      rolagemSolicitada = false;
+      rolarParaResultados();
+    }
+  }
 
   /**
    * Monta um seletor rotulado com a opção atual selecionada. O atributo data-filter permite
@@ -36,72 +48,89 @@
    */
   function montarCatalogo() {
     const { params } = lerRota();
+    const categoria = params.get('categoria') || '';
     return /* HTML */ `<div class="container"
       ><div class="page-heading"
-        >${montarCaminho([['Catálogo']])}<p class="eyebrow">Feito para a sua seleção</p
-        ><h1>Nosso catálogo</h1
+        ><div id="caminho-catalogo"
+          >${montarCaminho(
+            categoria ? [['Catálogo', '#/catalogo'], [categoria]] : [['Catálogo']],
+          )}</div
         ><p
           >Escolha seus modelos em grades completas. O valor apresentado é sempre por grade; as
           cores são sortidas.</p
         ></div
       ><div class="catalog-layout"
         ><aside class="filters" aria-label="Filtros do catálogo"
-          ><h2>Encontre o seu próximo favorito</h2
-          ><label class="filter-field"
-            ><span>Buscar modelo</span
-            ><input
-              type="search"
-              id="catalog-search"
-              data-filter="q"
-              value="${escaparHTML(params.get('q') || '')}"
-              placeholder="Nome ou tecido"
-          /></label>
-          ${montarFiltro(
-            'categoria',
-            'Categoria',
-            [['', 'Todas'], ...['Vestidos', 'Conjuntos', 'Bebê'].map((x) => [x, x])],
-            params.get('categoria') || '',
-          )}
-          ${montarFiltro(
-            'tecido',
-            'Tipo de tecido',
-            [['', 'Todos'], ...['Tricoline', 'Algodão', 'Musseline'].map((x) => [x, x])],
-            params.get('tecido') || '',
-          )}
-          ${montarFiltro(
-            'preco',
-            'Valor da grade',
-            [
-              ['', 'Todos os valores'],
-              ['ate150', 'Até R$ 150'],
-              ['150a200', 'R$ 150 a R$ 200'],
-              ['mais200', 'Acima de R$ 200'],
-            ],
-            params.get('preco') || '',
-          )}
-          ${montarFiltro(
-            'pecas',
-            'Peças por grade',
-            [
-              ['', 'Todas'],
-              ['3', '3 peças'],
-              ['4', '4 peças'],
-              ['5', '5 peças'],
-            ],
-            params.get('pecas') || '',
-          )}
-          <label class="check-inline"
-            ><input
-              type="checkbox"
-              data-filter="premium"
-              ${params.get('premium') === '1' ? 'checked' : ''}
-            />
-            Somente linha premium</label
-          ><button class="text-link" data-action="clear-filters">Limpar filtros</button
-          ><p class="filter-note"
-            >As cores são enviadas de forma sortida. Não há escolha de cor individual.</p
+          ><div id="campos-filtros"
+            ><h2>Filtrar produtos</h2
+            ><label class="filter-field"
+              ><span>Buscar modelo</span
+              ><input
+                type="search"
+                id="catalog-search"
+                data-filter="q"
+                value="${escaparHTML(params.get('q') || '')}"
+                placeholder="Nome ou tecido"
+            /></label>
+            ${montarFiltro(
+              'categoria',
+              'Categoria',
+              [['', 'Todas'], ...['Vestidos', 'Conjuntos', 'Bebê'].map((x) => [x, x])],
+              params.get('categoria') || '',
+            )}
+            ${montarFiltro(
+              'tecido',
+              'Tipo de tecido',
+              [['', 'Todos'], ...['Tricoline', 'Algodão', 'Musseline'].map((x) => [x, x])],
+              params.get('tecido') || '',
+            )}
+            ${montarFiltro(
+              'preco',
+              'Valor da grade',
+              [
+                ['', 'Todos os valores'],
+                ['ate150', 'Até R$ 150'],
+                ['150a200', 'R$ 150 a R$ 200'],
+                ['mais200', 'Acima de R$ 200'],
+              ],
+              params.get('preco') || '',
+            )}
+            ${montarFiltro(
+              'pecas',
+              'Peças por grade',
+              [
+                ['', 'Todas'],
+                ['3', '3 peças'],
+                ['4', '4 peças'],
+                ['5', '5 peças'],
+              ],
+              params.get('pecas') || '',
+            )}
+            <label class="check-inline"
+              ><input
+                type="checkbox"
+                data-filter="premium"
+                ${params.get('premium') === '1' ? 'checked' : ''}
+              />
+              Somente linha premium</label
+            ><button class="text-link" data-action="clear-filters">Limpar filtros</button
+            ><label class="filter-field ordem-movel"
+              ><span>Ordenar produtos</span
+              ><select data-filter="ordem"
+                ><option value="">Nossa seleção</option
+                ><option value="menor">Menor preço</option
+                ><option value="maior">Maior preço</option
+                ><option value="nome">Nome A–Z</option></select
+              ></label
+            ><p class="filter-note"
+              >As cores são enviadas de forma sortida. Não há escolha de cor individual.</p
+            ></div
           ></aside
-        ><section aria-label="Produtos encontrados"
+        ><section id="resultados-catalogo" tabindex="-1" aria-labelledby="titulo-catalogo"
+          ><h1 class="titulo-catalogo" id="titulo-catalogo"
+            >${escaparHTML(categoria || 'Catálogo')}</h1
+          ><button class="button secondary botao-filtros" data-action="filtros-abrir"
+            >${LuaKids.icones.montarIcone('filter')} Filtrar e ordenar</button
           ><div class="catalog-top"
             ><span id="catalog-count"></span
             ><label
@@ -125,6 +154,14 @@
     const grid = selecionar('#catalog-grid');
     if (!grid) return;
     const { params } = lerRota();
+    // Atualiza também ao filtrar sem remontar a página (desktop e painel móvel).
+    // A categoria fica junto dos resultados, visível após a rolagem da busca/filtros.
+    const categoria = params.get('categoria') || '';
+    selecionar('#titulo-catalogo').textContent = categoria || 'Catálogo';
+    selecionar('#caminho-catalogo').innerHTML = montarCaminho(
+      categoria ? [['Catálogo', '#/catalogo'], [categoria]] : [['Catálogo']],
+    );
+    document.title = `${categoria || 'Catálogo'} · Lua Kids`;
     const q = normalizarTexto(params.get('q'));
     let filtered = produtos.filter(
       (p) =>
@@ -142,8 +179,9 @@
     if (params.get('ordem') === 'maior') filtered.sort((a, b) => b.price - a.price);
     if (params.get('ordem') === 'nome')
       filtered.sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
-    const orderSelect = selecionar('[data-filter="ordem"]');
-    if (orderSelect) orderSelect.value = params.get('ordem') || '';
+    document.querySelectorAll('[data-filter="ordem"]').forEach((campo) => {
+      campo.value = params.get('ordem') || '';
+    });
     selecionar('#catalog-count').textContent =
       `${filtered.length} ${filtered.length === 1 ? 'modelo encontrado' : 'modelos encontrados'}`;
     grid.innerHTML = filtered.length
@@ -161,6 +199,7 @@
    * sem substituir o formulário em que o usuário está digitando.
    */
   function atualizarFiltro(field) {
+    if (field.closest('#painel-filtros')) return;
     const { params } = lerRota();
     const value = field.type === 'checkbox' ? (field.checked ? '1' : '') : field.value;
     if (value) params.set(field.dataset.filter, value);
@@ -168,5 +207,27 @@
     history.replaceState(null, '', '#/catalogo' + (params.size ? '?' + params.toString() : ''));
     atualizarResultadosCatalogo();
   }
-  LuaKids.catalogo = { montarCatalogo, atualizarResultadosCatalogo, atualizarFiltro };
+  /** Busca enviada leva ao resultado, sem deslocar a página a cada letra digitada. */
+  function rolarParaResultados() {
+    const resultados = selecionar('#resultados-catalogo');
+    if (!resultados) return;
+    resultados.focus({ preventScroll: true });
+    // O cabeçalho é fixo: descontar sua altura evita esconder a lista ao rolar.
+    const alturaCabecalho = selecionar('#header').getBoundingClientRect().height;
+    window.scrollTo({
+      top: Math.max(
+        0,
+        window.scrollY + resultados.getBoundingClientRect().top - alturaCabecalho - 16,
+      ),
+      behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+    });
+  }
+  LuaKids.catalogo = {
+    montarCatalogo,
+    atualizarResultadosCatalogo,
+    atualizarFiltro,
+    rolarParaResultados,
+    solicitarRolagem,
+    aplicarRolagemSolicitada,
+  };
 })();

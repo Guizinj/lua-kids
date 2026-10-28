@@ -1,13 +1,4 @@
 /* Adaptações por largura de tela e respeito à preferência por movimento reduzido. */
-/* Ajustes em monitores largos. */
-@media (min-width: 1400px) {
-  .hero-grid {
-    min-height: 520px;
-  }
-  .hero-copy {
-    padding-left: 65px;
-  }
-}
 /* Redistribuição das colunas em notebooks e tablets. */
 @media (max-width: 1050px) {
   .container {
@@ -24,18 +15,6 @@
   }
   .header-account span {
     display: none;
-  }
-  .hero-copy {
-    padding: 40px 25px 40px 35px;
-  }
-  .hero-grid {
-    min-height: 420px;
-  }
-  .hero-image {
-    min-height: 420px;
-  }
-  .hero h1 {
-    font-size: 46px;
   }
   .perks {
     gap: 15px;
@@ -170,50 +149,6 @@
     width: 100%;
     text-align: center;
   } /* Banner de apresentação: texto e imagem em duas colunas no computador. */
-  .hero {
-    padding-top: 18px;
-    padding-bottom: 16px;
-  }
-  .hero-grid {
-    grid-template-columns: 1fr;
-    border-radius: 5px 55px 5px 5px;
-  }
-  .hero-copy {
-    padding: 33px 27px 31px;
-  }
-  .hero h1 {
-    font-size: 42px;
-    margin-bottom: 15px;
-  }
-  .hero-description {
-    font-size: 12px;
-    max-width: 300px;
-    margin-bottom: 20px;
-  }
-  .hero-image {
-    height: 295px;
-    min-height: 0;
-  }
-  .hero-image > img {
-    object-position: center 45%;
-  }
-  .hero-note {
-    bottom: 15px;
-    left: 15px;
-    padding: 11px 15px;
-    font-size: 11px;
-  }
-  .hero-note small {
-    font-size: 9px;
-  }
-  .hero-caption {
-    margin-top: 15px;
-    font-size: 9px;
-  }
-  .hero .eyebrow {
-    margin-bottom: 15px;
-    font-size: 9px;
-  }
   .perks {
     grid-template-columns: 1fr 1fr;
     padding: 18px 0 22px;
@@ -560,7 +495,7 @@
     min-height: 40px;
   }
   .admin-layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 20px;
   }
   .customers {

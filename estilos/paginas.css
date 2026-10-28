@@ -57,7 +57,7 @@
   margin-bottom: 8px;
 }
 .filter-field select,
-.filter-field input[type="search"] {
+.filter-field input[type='search'] {
   font-size: 12px;
   padding: 10px 9px;
   background: #fcfaf8;
@@ -322,19 +322,22 @@
   margin: 4px 0 0;
 }
 .cart-body {
+  min-height: 0;
   overflow-y: auto;
   flex: 1;
   padding: 0 24px 24px;
 }
 .cart-item {
-  display: flex;
-  gap: 15px;
-  padding: 23px 0;
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  padding: 14px 0;
   border-bottom: 1px solid var(--line);
 }
 .cart-item img {
-  width: 78px;
-  height: 99px;
+  width: 58px;
+  height: 76px;
   object-fit: cover;
   border-radius: 7px;
   background: #eee7df;
@@ -345,30 +348,36 @@
   min-width: 0;
 }
 .cart-item h3 {
-  font-size: 12px;
-  margin: 0 0 7px;
+  font-size: 13px;
+  line-height: 1.35;
+  margin: 0 0 4px;
 }
 .cart-item p {
   font-size: 10px;
   color: var(--muted);
-  margin-bottom: 10px;
+  margin-bottom: 6px;
+}
+.cart-item-tamanhos {
+  display: block;
+  margin-top: 2px;
 }
 .cart-item-row {
   display: flex;
   justify-content: space-between;
-  gap: 10px;
+  gap: 8px;
   align-items: center;
 }
 .cart-item-row strong {
   font-size: 13px;
   color: var(--rose);
+  white-space: nowrap;
 }
 .cart-item .quantity {
-  min-height: 30px;
+  min-height: 34px;
 }
 .cart-item .quantity button {
-  width: 27px;
-  height: 30px;
+  width: 30px;
+  height: 34px;
   font-size: 14px;
 }
 .cart-item .quantity output {
@@ -380,7 +389,33 @@
   color: var(--muted);
   background: transparent;
   border: 0;
-  padding: 8px 0 0;
+  padding: 5px 0;
+  min-height: 28px;
+  width: 100%;
+}
+.cart-item-miniatura > a {
+  display: block;
+}
+.detalhes-item-sacola,
+.detalhes-item-pedido {
+  margin-top: 4px;
+}
+.detalhes-item-sacola summary,
+.detalhes-item-pedido summary {
+  cursor: pointer;
+  color: var(--rose);
+  font-size: 11px;
+  min-height: 30px;
+  line-height: 30px;
+}
+.detalhes-item-sacola .caracteristicas-item,
+.detalhes-item-pedido .caracteristicas-item {
+  padding-top: 5px;
+  border-top: 1px solid var(--line);
+}
+.detalhes-item-sacola .aviso-cores,
+.detalhes-item-pedido .aviso-cores {
+  margin-bottom: 0;
 }
 .cart-bottom {
   padding: 23px 24px;
@@ -389,6 +424,23 @@
 }
 .cart-progress {
   margin: 17px 0;
+}
+/* Mais espaço para os itens sem esconder o subtotal ou a ação de continuar. */
+.cart-dialog .dialog-heading {
+  padding: 18px 20px;
+}
+.cart-dialog .cart-body {
+  padding: 0 20px 16px;
+}
+.cart-dialog .cart-bottom {
+  padding: 16px 20px;
+}
+.cart-dialog .cart-progress {
+  margin: 0 0 12px;
+}
+.cart-dialog .summary-row.total {
+  margin: 12px 0;
+  padding-top: 12px;
 }
 .cart-progress p {
   font-size: 11px;
@@ -473,7 +525,7 @@
   font-weight: 600;
   margin-bottom: 8px;
 }
-input:not([type="checkbox"]):not([type="file"]),
+input:not([type='checkbox']):not([type='file']),
 select,
 textarea {
   width: 100%;
@@ -551,7 +603,7 @@ textarea {
   white-space: nowrap;
 }
 .status:before {
-  content: "";
+  content: '';
   width: 5px;
   height: 5px;
   border-radius: 50%;
@@ -719,7 +771,7 @@ textarea {
   border: 0;
 }
 .timeline li:before {
-  content: "";
+  content: '';
   position: absolute;
   left: -5px;
   top: 3px;
@@ -849,6 +901,10 @@ textarea {
 }
 .admin-orders {
   min-width: 0;
+  width: 100%;
+  max-width: 100%;
+  /* Impede que a largura mínima da tabela escape da seção de pedidos. */
+  overflow: hidden;
   background: white;
   border: 1px solid var(--line);
   border-radius: 10px;
@@ -868,7 +924,16 @@ textarea {
   font-size: 12px;
 }
 .table-wrap {
+  /* Ancora os rótulos de acessibilidade posicionados dentro da tabela.
+   * Sem esta referência, eles escapam da área rolável e alargam a página móvel.
+   */
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
   overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
 }
 .orders-table {
   width: 100%;
@@ -935,7 +1000,7 @@ textarea {
   font-size: 10px;
   color: var(--muted);
 }
-input[type="file"] {
+input[type='file'] {
   width: 100%;
   font-size: 11px;
   margin-top: 13px;
@@ -967,17 +1032,17 @@ input[type="file"] {
   font-size: 12px;
   color: var(--muted);
 }
-details {
+.faq details {
   padding: 20px 0;
   border-bottom: 1px solid var(--line);
 }
-summary {
+.faq summary {
   cursor: pointer;
   font-size: 13px;
   font-weight: 500;
   line-height: 1.6;
 }
-details p {
+.faq details p {
   font-size: 12px;
   color: var(--muted);
   max-width: 800px;

@@ -28,6 +28,23 @@ Abra **http://127.0.0.1:5173**. Encerre o servidor com `Ctrl+C`. Abrir por arqui
 
 Use **Reiniciar demonstração**, no rodapé, para recuperar o catálogo e os pedidos de exemplo. O checklist da reunião tem outra chave de armazenamento e é preservado.
 
+### Revisão para celular
+
+- O botão de menu abre categorias, favoritos, endereço e atendimento. O acesso ao **Painel de acompanhamento · demo** está no rodapé.
+- No catálogo, use **Filtrar e ordenar**, escolha os filtros e toque em **Aplicar filtros**. A busca enviada leva até os resultados.
+- Cores são referências do modelo; o envio continua sortido e sujeito a substituição. Não há escolha individual.
+- Em **Meus pedidos**, alterne entre Ana e Beatriz para conferir os favoritos separados. Em **Meu endereço**, salve um endereço fictício e confira o preenchimento do próximo pedido.
+- No painel, **Cancelar pedido** abre a confirmação dentro da página. **Voltar** mantém o pedido; **Cancelar pedido** confirma a operação e devolve a reserva existente uma única vez.
+- Os exemplos do carrossel não são depoimentos reais. O botão flutuante de WhatsApp abre apenas o atendimento manual.
+
+A primeira versão está preservada na tag Git `primeira-versao-aprovada`. Veja [como recuperar a cópia](RESTAURACAO.md).
+
+### Prévia no GitHub Pages
+
+Editar esta pasta não atualiza automaticamente a página pública. Para testar pelo GitHub Pages, é necessário que os arquivos alterados e os novos arquivos entrem no commit, sejam enviados à branch configurada e a publicação termine. Confira especialmente `estilos/ajustes-previa.css`, os novos módulos e `recursos/fontes/`.
+
+O HTML usa um identificador de revisão nas URLs de CSS/JavaScript para evitar que a nova publicação reutilize cópias antigas desses arquivos no navegador. Isso não substitui o envio/publicação dos arquivos.
+
 ## Limites desta entrega
 
 - Produtos, preços, tamanhos, estoque, nomes de clientes, telefones de clientes e números vendidos são exemplos.
@@ -82,3 +99,7 @@ Conferido em Chrome headless no Windows, com navegação real da interface: filt
 Foram verificadas páginas representativas em larguras de 320, 390, 768 e 1440 pixels, sem transbordamento horizontal da página. São simulações de tela; não substituem a avaliação em aparelhos físicos. A abertura direta do arquivo, o servidor HTTP e a navegação com armazenamento bloqueado também foram conferidos, sem erros de JavaScript ou recursos ausentes.
 
 Não coloque dados reais de clientes nesta prévia. Antes de publicar a loja para vendas, conclua autenticação, permissões, armazenamento privado dos comprovantes, catálogo real e demais pendências registradas no contexto.
+
+Tempo real entre aparelhos será implementado com Supabase. A prévia sincroniza apenas abas da mesma origem/navegador; as verificações locais não aprovam permissões de produção. Revise especialmente o cancelamento no Chrome e Safari do seu celular após esta atualização.
+
+Na revisão de 28/10/2026, os testes foram ampliados para migração por cliente, preservação de cores/tecido nos pedidos, eventos de toque do Chromium e sincronização de todos os status e comprovante entre duas abas. Esses testes usam perfis isolados e dados fictícios; não acessam seu navegador pessoal.

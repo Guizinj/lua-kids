@@ -18,11 +18,15 @@
    * mudar a sacola sem reconstruir a página inteira.
    */
   function renderizarCabecalho() {
+    const flutuante = selecionar('#whatsapp-flutuante');
+    flutuante.href = 'https://wa.me/' + WHATSAPP_LOJA;
+    flutuante.innerHTML = montarIcone('chat');
     const count = calcularTotaisSacola().grades;
-    selecionar('#header').innerHTML = `<div class="container header-main">${montarMarca()}
-    <form class="header-search" id="header-search" role="search"><label class="visually-hidden" for="search">O que você procura?</label><input type="search" id="search" name="q" placeholder="Encontre o próximo queridinho da sua loja…" autocomplete="off"><button class="icon-button" type="submit" aria-label="Buscar produtos">${montarIcone('search')}</button></form>
-    <div class="header-actions"><a class="icon-button" href="#/favoritos" aria-label="Favoritos">${montarIcone('heart')}${obterEstado().favorites.length ? `<span class="count-badge">${obterEstado().favorites.length}</span>` : ''}</a><a class="header-account" href="#/pedidos">${montarIcone('user')}<span><small>Área demonstrativa</small>Meus pedidos</span></a><button class="icon-button" data-action="cart-open" aria-label="Abrir sacola, ${count} grades">${montarIcone('bag')}<span class="count-badge">${count}</span></button></div>
-    </div><nav class="container header-nav" aria-label="Navegação principal"><a href="#/" data-nav="inicio">Início</a><a href="#/catalogo" data-nav="catalogo">Catálogo</a><a href="#/como-comprar" data-nav="como-comprar">Como comprar</a><a href="#/pedidos" data-nav="pedidos">Meus pedidos</a><a class="admin-link" href="#/painel" data-nav="painel">${montarIcone('grid')} Painel demo</a></nav>`;
+    selecionar('#header').innerHTML =
+      `<div class="container header-main"><button class="icon-button botao-menu" data-action="menu-abrir" aria-label="Abrir menu de categorias" aria-controls="menu-lateral" aria-expanded="false">${montarIcone('menu')}</button>${montarMarca()}
+    <form class="header-search" id="header-search" role="search"><label class="visually-hidden" for="search">O que você procura?</label><input type="search" id="search" name="q" placeholder="Buscar produtos ou tecidos" autocomplete="off"><button class="icon-button" type="submit" aria-label="Buscar produtos">${montarIcone('search')}</button></form>
+    <div class="header-actions"><a class="icon-button" href="#/favoritos" aria-label="Favoritos">${montarIcone('heart')}${obterEstado().favorites.length ? `<span class="count-badge">${obterEstado().favorites.length}</span>` : ''}</a><a class="header-account" href="#/pedidos">${montarIcone('user')}<span><small>Área demonstrativa</small>Minha conta</span></a><button class="icon-button" data-action="cart-open" aria-label="Abrir sacola, ${count} grades">${montarIcone('bag')}<span class="count-badge">${count}</span></button></div>
+    </div><nav class="container header-nav" aria-label="Navegação principal"><a href="#/" data-nav="inicio">Início</a><a href="#/catalogo" data-nav="catalogo">Catálogo</a><a href="#/como-comprar" data-nav="como-comprar">Como comprar</a><a href="#/pedidos" data-nav="pedidos">Meus pedidos</a></nav>`;
   }
 
   /**

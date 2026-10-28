@@ -6,6 +6,8 @@ Atualizado em 28/10/2026. Regras comerciais e pendências: [contexto](CONTEXTO-P
 
 Refatoração funcional conferida em 28/10/2026: [estrutura e comandos dos testes](ORGANIZACAO-DO-CODIGO.md#verificação-da-refatoração). Separar módulos não concede autorização de acesso nem muda a situação dos controles de produção abaixo.
 
+Revisão de celular: separar favoritos/endereços por perfil demonstrativo, mudar confirmações e retirar o link do painel da navegação pública são ajustes funcionais locais. Não implementam autenticação ou autorização. A atualização entre aparelhos via Supabase permanece pendente; deverá incluir testes de isolamento das assinaturas de tempo real e recuperação do estado após reconexão. O ponto de restauração anterior está descrito em [RESTAURACAO.md](RESTAURACAO.md).
+
 ## 1. Permissões
 
 | Perfil | Acesso previsto |

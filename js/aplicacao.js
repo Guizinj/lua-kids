@@ -34,6 +34,7 @@
       produto: () => montarPaginaProduto(partes[1]),
       finalizar: montarFechamento,
       pedidos: montarHistoricoCliente,
+      endereco: LuaKids.enderecoConta.montarEnderecoConta,
       favoritos: montarFavoritos,
       pedido: () => montarDetalhesPedido(partes[1]),
       painel: () =>
@@ -47,6 +48,7 @@
       produto: encontrarProduto(partes[1])?.name || 'Produto',
       finalizar: 'Fechar pedido',
       pedidos: 'Meus pedidos',
+      endereco: 'Meu endereço',
       favoritos: 'Favoritos',
       pedido: 'Detalhes do pedido',
       painel: 'Painel demonstrativo',
@@ -64,11 +66,14 @@
     });
     atualizarResultadosCatalogo();
     atualizarTabelaPedidos();
-    atualizarAvisoEntrega();
+    LuaKids.maisVendidos.atualizarControles();
+    if (nome === 'finalizar' && rolar) LuaKids.fechamento.iniciarAvisosEntrega();
+    else atualizarAvisoEntrega();
     if (rolar) {
       window.scrollTo(0, 0);
       conteudo.focus({ preventScroll: true });
     }
+    LuaKids.catalogo.aplicarRolagemSolicitada();
   }
   registrarRenderizador(renderizarPagina);
   carregarEstado();
@@ -76,4 +81,5 @@
   renderizarRodape();
   LuaKids.eventos.registrarEventos();
   renderizarPagina(false);
+  if (lerRota().parts[0] === 'finalizar') LuaKids.fechamento.iniciarAvisosEntrega();
 })();

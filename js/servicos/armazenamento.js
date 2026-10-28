@@ -13,11 +13,47 @@
   let estado;
   let armazenamentoDisponivel = true;
   /**
+   * Migração aditiva: os dados globais antigos pertencem só ao perfil então ativo.
+   * Não altera pedidos/anexos; accountRevision independe da versão legada do estado.
+   */
+  function prepararContas(salvo) {
+    const chave = salvo.profile.id || 'visitante';
+    if (salvo.accountRevision !== 2) {
+      salvo.favoritesByCustomer = { [chave]: [...salvo.favorites] };
+      salvo.draftsByCustomer = { [chave]: { ...salvo.checkoutDraft } };
+      salvo.addressesByCustomer = {};
+      if (salvo.profile.street && salvo.profile.city && salvo.profile.uf) {
+        const campos = ['cep', 'city', 'uf', 'street', 'number', 'neighborhood', 'complement'];
+        salvo.addressesByCustomer[chave] = Object.fromEntries(
+          campos.map((campo) => [campo, salvo.profile[campo] || '']),
+        );
+      }
+      salvo.customersById = Object.fromEntries(
+        salvo.orders.map(({ customer }) => [
+          customer.id,
+          { id: customer.id, name: customer.name, phone: customer.phone },
+        ]),
+      );
+      if (salvo.profile.id)
+        salvo.customersById[chave] = {
+          id: salvo.profile.id,
+          name: salvo.profile.name,
+          phone: salvo.profile.phone,
+        };
+      salvo.accountRevision = 2;
+    }
+    salvo.favorites = [...(salvo.favoritesByCustomer[chave] || [])];
+    salvo.checkoutDraft = { ...(salvo.draftsByCustomer[chave] || {}) };
+    return salvo;
+  }
+  /**
    * Restaura o mesmo formato antigo; se o navegador bloquear o armazenamento, usa memória e
    * avisa.
    */
   function carregarEstado() {
     const inicial = criarEstadoInicial();
+    estado = null;
+    armazenamentoDisponivel = true;
     try {
       const salvo = JSON.parse(localStorage.getItem(CHAVE_ARMAZENAMENTO) || 'null');
       if (
@@ -31,12 +67,19 @@
       ) {
         estado = { ...inicial, ...salvo };
         for (const id of Object.keys(estado.cart))
-          if (!encontrarProduto(id) || !Number.isInteger(estado.cart[id]) || estado.cart[id] < 1)
+          if (
+            !encontrarProduto(id) ||
+            !Number.isInteger(estado.cart[id]) ||
+            estado.cart[id] < 1
+          )
             delete estado.cart[id];
       } else estado = inicial;
+      prepararContas(estado);
       localStorage.setItem(CHAVE_ARMAZENAMENTO, JSON.stringify(estado));
     } catch {
-      estado = inicial;
+      // Se apenas a gravação falhou (por exemplo, limite ao migrar), conserva os
+      // registros já recuperados em memória em vez de substituí-los por exemplos.
+      estado = estado || prepararContas(inicial);
       armazenamentoDisponivel = false;
       if (!document.querySelector('.storage-warning')) {
         const aviso = document.createElement('div');
@@ -79,7 +122,10 @@
    * preservado.
    */
   function reiniciarDemonstracao() {
-    alterarEstado((copia) => Object.assign(copia, criarEstadoInicial()));
+    alterarEstado((copia) => {
+      for (const chave of Object.keys(copia)) delete copia[chave];
+      Object.assign(copia, prepararContas(criarEstadoInicial()));
+    });
   }
 
   LuaKids.armazenamento = { carregarEstado, obterEstado, alterarEstado, reiniciarDemonstracao };

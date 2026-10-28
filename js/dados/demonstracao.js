@@ -17,6 +17,11 @@ window.LuaKids.demonstracao = (() => {
       premium: true,
       price: 15960,
       sizes: ['2', '4', '6', '8'],
+      colors: [
+        { name: 'Rosé', hex: '#d9a4aa' },
+        { name: 'Creme', hex: '#eee4d3' },
+        { name: 'Azul', hex: '#9fbac9' },
+      ],
       stock: 8,
       sold: 32,
       image: 'dress',
@@ -37,6 +42,10 @@ window.LuaKids.demonstracao = (() => {
       premium: false,
       price: 13960,
       sizes: ['2', '4', '6', '8'],
+      colors: [
+        { name: 'Areia', hex: '#d4c3a7' },
+        { name: 'Verde', hex: '#a3b09a' },
+      ],
       stock: 12,
       sold: 46,
       image: 'set',
@@ -57,6 +66,10 @@ window.LuaKids.demonstracao = (() => {
       premium: false,
       price: 11960,
       sizes: ['P', 'M', 'G', 'GG'],
+      colors: [
+        { name: 'Rosé', hex: '#d9a4aa' },
+        { name: 'Creme', hex: '#eee4d3' },
+      ],
       stock: 7,
       sold: 24,
       image: 'romper',
@@ -77,6 +90,10 @@ window.LuaKids.demonstracao = (() => {
       premium: false,
       price: 14960,
       sizes: ['4', '6', '8', '10'],
+      colors: [
+        { name: 'Rosa', hex: '#d78fa8' },
+        { name: 'Lilás', hex: '#b8a2cd' },
+      ],
       stock: 5,
       sold: 18,
       image: 'dress',
@@ -97,6 +114,10 @@ window.LuaKids.demonstracao = (() => {
       premium: true,
       price: 21950,
       sizes: ['4', '6', '8', '10', '12'],
+      colors: [
+        { name: 'Azul', hex: '#9fbac9' },
+        { name: 'Areia', hex: '#d4c3a7' },
+      ],
       stock: 6,
       sold: 27,
       image: 'set',
@@ -117,6 +138,10 @@ window.LuaKids.demonstracao = (() => {
       premium: true,
       price: 10470,
       sizes: ['P', 'M', 'G'],
+      colors: [
+        { name: 'Creme', hex: '#eee4d3' },
+        { name: 'Verde', hex: '#a3b09a' },
+      ],
       stock: 9,
       sold: 16,
       image: 'romper',
@@ -169,6 +194,8 @@ window.LuaKids.demonstracao = (() => {
         price: p.price,
         sizes: [...p.sizes],
         image: p.image,
+        fabric: p.fabric,
+        colors: p.colors.map((cor) => ({ ...cor })),
         quantity,
       };
     };

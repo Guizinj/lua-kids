@@ -1,0 +1,803 @@
+/* Revisão da prévia: mantém a paleta e a tipografia, amplia o conforto no celular. */
+
+/* Cores são referências do modelo, sem seleção individual e sem estoque por cor. */
+.cores-modelo {
+  margin: 12px 0;
+  font-size: 12px;
+}
+.cores-rotulo {
+  color: var(--muted);
+  display: block;
+  margin-bottom: 7px;
+}
+.cores-modelo ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  padding: 0;
+  margin: 0;
+}
+.cores-modelo li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 1.4;
+}
+.amostra-cor {
+  width: 15px;
+  height: 15px;
+  border: 1px solid #352c3030;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.cores-compactas {
+  font-size: 11px;
+}
+/* Cartões: aproxima a composição das cores, sem a linha repetida de cores sortidas. */
+.product-card .product-meta {
+  margin-bottom: 6px;
+}
+.product-card .cores-modelo {
+  margin: 6px 0;
+}
+.product-card .cores-rotulo {
+  margin-bottom: 5px;
+}
+.product-card .aviso-cores {
+  margin: 6px 0 10px;
+}
+.aviso-cores {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 8px 0 14px;
+}
+.caracteristicas-item {
+  min-width: 0;
+}
+.caracteristicas-item p {
+  font-size: 11px;
+  line-height: 1.6;
+  margin: 5px 0;
+}
+.caracteristicas-item .cores-modelo {
+  margin: 9px 0;
+}
+.summary-item > div,
+.cart-item-info {
+  min-width: 0;
+}
+.summary-item {
+  align-items: start;
+}
+.summary-item > strong {
+  white-space: nowrap;
+}
+/* Histórico: miniatura e resumo de leitura; características completas sob demanda. */
+.summary-item.item-pedido-compacto {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  gap: 12px;
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+.item-pedido-compacto img {
+  width: 48px;
+  height: 64px;
+}
+.item-pedido-compacto h3 {
+  font-size: 13px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.item-pedido-valores {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin: 4px 0;
+}
+.item-pedido-valores strong {
+  color: var(--rose);
+  font-size: 13px;
+}
+.item-pedido-compacto .item-pedido-tamanhos,
+.item-pedido-valores p {
+  font-size: 11px;
+  line-height: 1.6;
+}
+.item-pedido-compacto .aviso-cores {
+  margin: 8px 0 0;
+}
+
+/* Fechamento: cada etapa preserva seus campos no formulário ao ser recolhida. */
+.etapa-fechamento {
+  padding: 20px;
+}
+.etapa-fechamento > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  min-height: 48px;
+  cursor: pointer;
+  list-style: none;
+}
+.etapa-fechamento > summary::-webkit-details-marker {
+  display: none;
+}
+.etapa-textos {
+  min-width: 0;
+}
+.etapa-titulo {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.resumo-etapa {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  margin-top: 6px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.etapa-fechamento > summary > .icon {
+  width: 18px;
+  height: 18px;
+  color: var(--rose);
+  transform: rotate(90deg);
+}
+.etapa-fechamento[open] > summary > .icon {
+  transform: rotate(-90deg);
+}
+.conteudo-etapa {
+  padding-top: 20px;
+  margin-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+/* Diálogos próprios: confirmação legível, foco nativo e nenhuma ação por toque no fundo. */
+html.modal-aberto {
+  overflow: hidden;
+}
+dialog::backdrop {
+  background: #352c3075;
+  backdrop-filter: blur(3px);
+}
+.dialogo-aviso {
+  width: min(480px, calc(100% - 32px));
+  max-height: calc(100dvh - 32px);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 30px;
+  color: var(--ink);
+  box-shadow: var(--shadow);
+}
+.dialogo-aviso h2 {
+  font-size: 29px;
+}
+.dialogo-aviso p {
+  font-size: 15px;
+}
+.dialogo-aviso .dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.dialogo-aviso .button {
+  min-height: 48px;
+}
+.painel-lateral {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: min(390px, 100%);
+  height: 100dvh;
+  max-height: 100dvh;
+  max-width: 100%;
+  margin: 0;
+  padding: 26px;
+  border: 0;
+  border-right: 1px solid var(--line);
+  background: var(--cream);
+  color: var(--ink);
+  overscroll-behavior: contain;
+  overflow-y: auto;
+}
+.cabecalho-painel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 22px;
+}
+.cabecalho-painel h2 {
+  font-size: 28px;
+  margin: 0;
+}
+.cabecalho-painel .eyebrow {
+  margin: 0 0 5px;
+}
+.painel-lateral .icon-button,
+.botao-menu {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+}
+.painel-lateral nav h3 {
+  font:
+    600 12px 'Segoe UI',
+    Arial,
+    sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--rose);
+  margin: 30px 0 8px;
+}
+.painel-lateral nav a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 48px;
+  padding: 12px 2px;
+  gap: 10px;
+  border-bottom: 1px solid var(--line);
+  font-size: 15px;
+}
+.contagem-categoria {
+  font-size: 12px;
+  border-radius: 20px;
+  background: var(--blush);
+  padding: 3px 9px;
+}
+/* Categorias em primeiro plano, logo após a busca do menu. */
+.menu-categorias {
+  margin-top: 28px;
+}
+.painel-lateral nav .menu-categorias h3 {
+  margin: 0 0 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.lista-categorias-menu {
+  display: grid;
+}
+.painel-lateral nav .link-categoria {
+  min-height: 50px;
+  padding: 11px 0;
+  color: var(--ink);
+  font-size: 17px;
+  font-weight: 700;
+}
+.categoria-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  color: var(--muted);
+}
+.categoria-info .icon {
+  width: 16px;
+  height: 16px;
+}
+.link-categoria .contagem-categoria {
+  background: transparent;
+  padding: 0;
+  font-size: 11px;
+  font-weight: 400;
+}
+.painel-lateral nav .link-categoria:hover,
+.painel-lateral nav .link-categoria.categoria-ativa {
+  color: var(--rose);
+}
+.categoria-ativa .categoria-info {
+  color: var(--rose);
+}
+.busca-menu label {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 7px;
+}
+.busca-menu > div {
+  display: flex;
+  border: 1px solid var(--line);
+  background: white;
+  border-radius: 8px;
+}
+.busca-menu input {
+  min-width: 0;
+  width: 100%;
+  background: transparent;
+  border: 0;
+  padding: 10px;
+  font-size: 16px;
+}
+.header-main {
+  gap: 18px;
+}
+.botao-menu {
+  border: 1px solid var(--line);
+}
+
+/* Atendimento manual; o botão não cobre diálogos nem envia mensagens sozinho. */
+.whatsapp-flutuante {
+  position: fixed;
+  right: max(22px, env(safe-area-inset-right));
+  bottom: calc(22px + env(safe-area-inset-bottom));
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #217c49;
+  color: white;
+  box-shadow: 0 5px 22px #173c3b35;
+  z-index: 8;
+  border: 2px solid white;
+}
+.whatsapp-flutuante .icon {
+  width: 29px;
+  height: 29px;
+}
+.whatsapp-flutuante:hover {
+  background: #185e37;
+}
+.modal-aberto .whatsapp-flutuante {
+  visibility: hidden;
+}
+.site-footer {
+  padding-bottom: 90px;
+}
+.toast {
+  bottom: calc(90px + env(safe-area-inset-bottom));
+}
+
+/* Filtros com campos de altura constante. O mesmo conteúdo atende lateral e modal. */
+.botao-filtros,
+.ordem-movel {
+  display: none;
+}
+.filter-field select,
+.filter-field input[type='search'],
+.catalog-top select {
+  min-height: 48px;
+  width: 100%;
+  min-width: 0;
+}
+.filter-field > span {
+  font-size: 12px;
+  line-height: 1.5;
+}
+.filters .check-inline {
+  min-height: 44px;
+}
+.filters #campos-filtros {
+  display: grid;
+  gap: 17px;
+}
+.filters .filter-field {
+  margin: 0;
+}
+.filters h2 {
+  margin-bottom: 0;
+}
+#resultados-catalogo {
+  min-width: 0;
+  scroll-margin-top: 24px;
+  outline: none;
+}
+.titulo-catalogo {
+  color: var(--rose);
+  font-size: clamp(26px, 2.5vw, 34px);
+  font-weight: 700;
+  line-height: 1.3;
+  text-align: center;
+  margin: 4px 0 24px;
+  overflow-wrap: anywhere;
+}
+.catalog-top label {
+  max-width: 220px;
+}
+/* Filtros em uma janela compacta. Só os campos rolam; título e ações ficam visíveis. */
+.painel-filtros {
+  inset: 0;
+  width: min(420px, calc(100% - 32px));
+  height: auto;
+  max-height: min(70dvh, 560px);
+  margin: auto;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  overflow: hidden;
+}
+.painel-filtros[open] {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+.painel-filtros .cabecalho-painel {
+  margin: 0;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+}
+.painel-filtros .cabecalho-painel h2 {
+  font-size: 23px;
+  line-height: 1.25;
+}
+.conteudo-filtros {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 18px;
+}
+.painel-filtros .filter-field {
+  display: block;
+  margin-bottom: 18px;
+}
+.painel-filtros .filter-field > span {
+  display: block;
+  margin-bottom: 7px;
+}
+.painel-filtros .filter-field input,
+.painel-filtros .filter-field select {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid var(--line);
+  background: white;
+  border-radius: 7px;
+}
+.painel-filtros .check-inline {
+  min-height: 44px;
+  margin: 10px 0;
+  font-size: 14px;
+}
+.painel-filtros .filter-note {
+  font-size: 12px;
+  color: var(--muted);
+}
+.painel-filtros #campos-filtros > h2,
+.painel-filtros [data-action='clear-filters'] {
+  display: none;
+}
+.acoes-filtros {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 14px 18px;
+  background: var(--cream);
+  border-top: 1px solid var(--line);
+}
+.acoes-filtros .button {
+  min-height: 48px;
+  padding-inline: 12px;
+}
+.formulario-endereco {
+  max-width: 780px;
+}
+.acoes-endereco {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 25px 0 15px;
+}
+.account-sidebar .atalho-endereco {
+  /* No celular, a lateral tem uma coluna de 46px para o avatar. O atalho
+   * precisa atravessar as duas colunas, em vez de ficar espremido nessa coluna.
+   */
+  grid-column: 1 / -1;
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  margin: 18px 0 0;
+  padding: 12px 14px;
+  justify-content: flex-start;
+  white-space: nowrap;
+  font-size: 13px;
+}
+.atalho-endereco .icon:last-child {
+  margin-left: auto;
+}
+
+/* Vitrine horizontal: há espaço para o começo do próximo cartão em cada largura. */
+.mais-vendidos {
+  min-width: 0;
+  border-bottom: 1px solid var(--line);
+}
+.lista-mais-vendidos {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  padding-bottom: 4px;
+}
+.lista-mais-vendidos::-webkit-scrollbar {
+  display: none;
+}
+.lista-mais-vendidos > .product-card {
+  flex: 0 0 calc((100% - 60px) / 3.25);
+  scroll-snap-align: start;
+}
+.lista-mais-vendidos:focus-visible {
+  outline: 2px solid var(--rose);
+  outline-offset: 4px;
+}
+.setas-mais-vendidos {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.setas-mais-vendidos .icon-button {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  background: white;
+}
+@media (max-width: 760px) {
+  .lista-mais-vendidos {
+    gap: 13px;
+  }
+  .lista-mais-vendidos > .product-card {
+    /* Próximo do tamanho da grade inicial: dois cartões e parte do terceiro. */
+    flex-basis: calc((100% - 26px) / 2.15);
+  }
+  .mais-vendidos .section-heading {
+    gap: 12px;
+    align-items: center;
+  }
+  .mais-vendidos .section-heading h2 {
+    font-size: 28px;
+  }
+  .mais-vendidos .section-heading p {
+    margin-bottom: 0;
+  }
+}
+
+/* Relatos horizontais, com controle manual e sem avaliações inventadas como reais. */
+.lista-depoimentos {
+  display: flex;
+  overflow-x: auto;
+  gap: 20px;
+  padding: 4px 2px 18px;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+}
+.cartao-depoimento {
+  flex: 0 0 calc((100% - 40px) / 3);
+  min-width: 260px;
+  background: white;
+  border: 1px solid var(--line);
+  padding: 25px;
+  border-radius: 12px;
+  scroll-snap-align: start;
+}
+.cartao-depoimento p {
+  margin: 20px 0;
+  font-size: 14px;
+}
+.cartao-depoimento strong {
+  font-size: 13px;
+}
+.etiqueta-exemplo {
+  display: inline-block;
+  padding: 5px 8px;
+  background: var(--blush);
+  color: var(--rose);
+  border-radius: 5px;
+  font-size: 11px;
+}
+.setas-depoimentos {
+  display: flex;
+  gap: 8px;
+}
+.setas-depoimentos button {
+  border: 1px solid var(--line);
+  width: 44px;
+  height: 44px;
+}
+
+@media (max-width: 1050px) {
+  .header-main {
+    gap: 12px;
+  }
+  .header-search {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 760px) {
+  /* Preserva uma faixa da página ao lado do menu, inclusive em celulares estreitos. */
+  #menu-lateral {
+    width: min(350px, 88vw);
+    padding-inline: 20px;
+  }
+  /* Marca, menu e ações compartilham uma linha; a busca ocupa a linha seguinte. */
+  .header-main {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .header-main .brand {
+    flex: 1;
+    min-width: 0;
+  }
+  .header-main .header-actions {
+    margin-left: auto;
+    gap: 3px;
+  }
+  .header-main .header-search {
+    order: 5;
+    flex-basis: 100%;
+    width: 100%;
+    margin: 3px 0 0;
+  }
+  .header-main .brand-seal {
+    width: 38px;
+    height: 38px;
+  }
+  .header-main .brand-name {
+    font-size: 23px;
+  }
+  .header-main .brand-name small {
+    font-size: 8px;
+  }
+  .header-actions .icon-button,
+  .header-account,
+  .botao-menu {
+    width: 40px;
+    height: 44px;
+  }
+  .header-nav {
+    gap: 20px;
+  }
+  .header-nav a {
+    white-space: nowrap;
+  }
+  .botao-filtros {
+    display: inline-flex;
+    width: 100%;
+    min-height: 48px;
+    margin-bottom: 20px;
+    justify-content: center;
+  }
+  .filters {
+    display: none;
+  }
+  .painel-filtros .ordem-movel {
+    display: block;
+  }
+  .catalog-top label {
+    max-width: 180px;
+  }
+  .catalog-top select {
+    font-size: 14px;
+    padding: 10px;
+    width: 100%;
+    max-width: 100%;
+  }
+  .catalog-top {
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+  }
+  .catalog-top > span {
+    min-width: 0;
+  }
+  .cores-compactas li {
+    gap: 4px;
+  }
+  .cores-compactas ul {
+    gap: 6px 9px;
+  }
+  .cores-compactas {
+    font-size: 10px;
+  }
+  .product-card .aviso-cores {
+    font-size: 10px;
+  }
+  .product-price {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .product-price strong {
+    min-width: 0;
+  }
+  .product-price .add-button {
+    margin-left: auto;
+  }
+  .summary-item {
+    grid-template-columns: 48px minmax(0, 1fr);
+  }
+  .summary-item > strong {
+    grid-column: 2;
+    justify-self: start;
+  }
+  .summary-item img {
+    width: 48px;
+    height: 64px;
+  }
+  .cart-item {
+    grid-template-columns: 58px minmax(0, 1fr);
+    gap: 12px;
+  }
+  .cart-item-row {
+    flex-wrap: nowrap;
+    gap: 8px;
+  }
+  .dialogo-aviso {
+    padding: 24px;
+  }
+  .dialogo-aviso .dialog-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .dialogo-aviso .dialog-actions .button {
+    width: 100%;
+  }
+  .acoes-endereco {
+    flex-direction: column;
+  }
+  .cartao-depoimento {
+    flex-basis: 88%;
+    min-width: 0;
+  }
+  .depoimentos .section-heading {
+    align-items: flex-start;
+  }
+  .whatsapp-flutuante {
+    width: 52px;
+    height: 52px;
+    right: 16px;
+    bottom: calc(16px + env(safe-area-inset-bottom));
+  }
+
+  /* A página fica contida; somente a tabela pode rolar horizontalmente. */
+  .admin-layout,
+  .admin-orders,
+  .customers,
+  .stat-grid > *,
+  .admin-intro > div {
+    min-width: 0;
+  }
+  .table-toolbar input {
+    width: 100%;
+    min-width: 0;
+  }
+  .table-wrap {
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+  }
+  .customer-button {
+    overflow-wrap: anywhere;
+  }
+  .admin-intro {
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  .admin-actions .button {
+    white-space: normal;
+    line-height: 1.5;
+    min-height: 48px;
+  }
+}
+
+@media print {
+  .whatsapp-flutuante,
+  #menu-lateral,
+  #painel-filtros,
+  #dialogo-aviso {
+    display: none !important;
+  }
+}

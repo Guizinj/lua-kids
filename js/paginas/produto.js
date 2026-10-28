@@ -6,7 +6,8 @@
 (() => {
   'use strict';
   const LuaKids = window.LuaKids;
-  const { encontrarProduto, escaparHTML, formatarDinheiro, caminhoImagem } = LuaKids.utilitarios;
+  const { encontrarProduto, escaparHTML, formatarDinheiro, caminhoImagem } =
+    LuaKids.utilitarios;
   const { produtos } = LuaKids.demonstracao;
   const { obterEstado } = LuaKids.armazenamento;
   const { montarCaminho, montarPaginaNaoEncontrada } = LuaKids.componentes;
@@ -48,12 +49,13 @@
           ><p class="eyebrow"
             >${escaparHTML(p.category)} ·
             ${escaparHTML(p.fabric)}${p.premium ? ' · Premium' : ''}</p
-          ><h1>${escaparHTML(p.name)}</h1><p class="description">${escaparHTML(p.description)}</p
+          ><h1>${escaparHTML(p.name)}</h1
+          ><p class="description">${escaparHTML(p.description)}</p
           ><div class="product-price"
             ><strong>${formatarDinheiro(p.price)} <small>/ grade completa</small></strong></div
           ><p class="per-piece"
-            >Equivalente a ${formatarDinheiro(Math.round(p.price / p.sizes.length))} por unidade do
-            modelo.</p
+            >Equivalente a ${formatarDinheiro(Math.round(p.price / p.sizes.length))} por unidade
+            do modelo.</p
           ><div class="grade-box"
             ><h3>O que vem na sua grade · ${p.sizes.length} peças</h3
             ><div class="sizes"
@@ -66,6 +68,8 @@
             ><p
               >A grade é fechada: uma unidade de cada tamanho, sem alteração da composição.</p
             ></div
+          >${LuaKids.cores.montarCores(p.colors)}<p class="aviso-cores"
+            >${LuaKids.cores.AVISO_CORES}</p
           ><div class="notice rose"
             ><strong>Um detalhe importante:</strong> as cores são sortidas e não podem ser
             escolhidas. A foto é ilustrativa.</div

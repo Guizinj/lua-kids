@@ -17,13 +17,7 @@
   function montarComoComprar() {
     return /* HTML */ `<div class="container"
       ><div class="page-heading"
-        >${montarCaminho([['Como comprar']])}<p class="eyebrow">Uma compra simples, do seu jeito</p
-        ><h1>Da nossa seleção para a sua loja.</h1
-        ><p
-          >Escolha os modelos, monte suas grades e converse com a Lua Kids para confirmar o
-          pedido.</p
-        ></div
-      ><div class="step-grid"
+        >${montarCaminho([['Como comprar']])}<div class="step-grid"
         ><article class="step-card"
           ><div class="step-number">01.</div><h2>Escolha suas grades.</h2
           ><p

@@ -52,6 +52,7 @@ O dono destacou grades, cores sortidas, conta para incentivar retorno, filtros, 
 
 - Desejados: conta do cliente, histórico, favoritos e acompanhamento do pedido, incluindo anexo de despacho.
 - Login continua **pendente**. O dono preferiu telefone e senha; o desenvolvedor verificará a conveniência, integração e custo de mensagens antes de decidir. E-mail e senha foi considerado, mas **não foi aprovado como escolha final**.
+- Com login real, o fechamento deve recuperar nome e contato da conta, sem exigir novo preenchimento da etapa “Quem está comprando?”. Mostrar apenas um resumo (“Comprando como…”) com opção de editar e solicitar somente dados necessários que estiverem faltando. O formulário atual dessa etapa atende à demonstração sem login.
 - Não criar login fictício como se fosse seguro nem colocar o protótipo aberto em produção com dados de clientes.
 - Pedido nasce aguardando confirmação, sem reserva do estoque.
 - O dono confirma manualmente no painel, verifica disponibilidade e combina pagamento; a confirmação reserva as grades.
@@ -75,6 +76,7 @@ Dois administradores previstos: desenvolvedor e dono. **Cadastro de produtos, ed
 ## Identidade visual
 
 - O usuário escolheu uma direção leve e delicada.
+- Após avaliar a prévia, aprovou títulos e chamadas com Nunito 700/800 para um toque mais kids. Fonte WOFF2 local e licença em `recursos/fontes/`; textos, preços, formulários e botões mantêm Segoe UI/Arial. A imagem da marca e sua assinatura tipográfica foram preservadas.
 - Depois enviou uma logo JPG: “Lua kids” em rosé, lua crescente e laço rosa, sobre círculo claro com fundo escuro.
 - Paleta derivada da marca: creme/branco, rosé, rosa nos destaques e grafite nos textos. A paleta provisória lilás/menta foi substituída pela referência real da logo.
 - Logo original preservada em `recursos/imagens/logo-original.jpg`. A apresentação circular é feita em CSS, sem recriar a marca.
@@ -119,6 +121,32 @@ Dois administradores previstos: desenvolvedor e dono. **Cadastro de produtos, ed
 7. A confirmação/reserva deve ser transacional e revalidar estoque no banco, inclusive em acessos simultâneos. Preço e mínimo também precisam de validação confiável fora do navegador.
 8. Definir domínio e hospedagem. O Supabase não substitui automaticamente a hospedagem do frontend estático.
 9. Testar o fluxo real, publicar, orientar o dono presencialmente e combinar manutenção e suporte.
+
+## Revisão após avaliação no celular — 28/10/2026
+
+- A primeira versão anterior aos ajustes está preservada na tag `primeira-versao-aprovada`. Consulte [restauração](RESTAURACAO.md).
+- Mantidas a identidade visual rosé/creme e a tipografia Nunito nos títulos e chamadas.
+- Decisão final sobre a abertura: o usuário pediu a remoção completa da seção hero, inclusive imagem, título e chamada. A página inicial começa diretamente pelo bloco `perks`, seguido dos produtos e demais seções. Não recolocar banner de abertura sem nova solicitação.
+- Logo após `perks`, incluir carrossel “Mais vendidos” com quatro produtos e parte do próximo cartão visível, navegação manual por arraste/setas e vendas explicitamente demonstrativas. Nesta prévia, ordena por grades vendidas fictícias, com nome como desempate. Futuramente, a classificação deve vir do banco com critério/período aprovado; não implementar rankings reais nem criar tabelas Supabase nesta etapa.
+- Diagnóstico da prévia pública: em 28/10/2026, `https://guizinj.github.io/lua-kids/` ainda servia o primeiro `index.html`, sem referência a `ajustes-previa.css`; o arquivo público `base.css` não continha Nunito nem as correções de rolagem e `ajustes-previa.css` retornava 404. O HEAD local continuava em `c9e326a`, com as revisões na árvore de trabalho. Não confundir testes locais com o conteúdo efetivamente publicado; conferir commit/publicação antes de investigar uma regressão que só ocorre no Pages.
+- Menu lateral com acessos rápidos, categorias derivadas do catálogo, endereço e atendimento. Painel demo agora acessível pelo rodapé, sem link na navegação principal. Isso não representa proteção de acesso.
+- Refinamento móvel: “Filtrar e ordenar” usa uma janela central com margens, até 70% da altura da tela e limite de 560px, campos com rolagem interna e cabeçalho/ações sempre visíveis. O atalho “Meu endereço” ocupa as duas colunas da área do perfil, sem ficar comprimido na coluna do avatar.
+- Painel mantém a tabela no celular com rolagem horizontal somente dentro da seção de pedidos. O usuário esclareceu que a rolagem indesejada era da página inteira; a apresentação em cartões foi retirada. Filtros do catálogo abrem em um painel móvel com aplicar/limpar; buscas enviadas levam aos resultados.
+- Após novo relato de deslocamento do documento no celular, foram reforçados os limites de largura do painel e da área rolável, a coluna móvel usa `minmax(0, 1fr)` e o documento restringe transbordamento horizontal. Em 28/10/2026, `node testes/verificar-navegacao.cjs` passou com movimentos de toque dentro da tabela, nas duas bordas e fora dela: a tabela rola e o documento permanece na posição horizontal zero. Chromium emulado não comprova comportamento em Safari físico.
+- Correção da causa da rolagem em 28/10/2026: o rótulo `.visually-hidden` da última coluna tinha posicionamento absoluto referido ao documento e escapava da área rolável. `.table-wrap` agora usa `position: relative`, contendo esse rótulo sem remover sua acessibilidade. No Chrome móvel, o erro ampliava também `innerWidth`, mascarando os testes anteriores; as verificações passam a comparar `scrollWidth` com `clientWidth` e conferir o diálogo nas larguras 320, 364, 390, 768 e 1440px.
+- Confirmações de cancelamento, remoção de anexo e reinício usam diálogo HTML; não dependem mais de `window.confirm`. Cancelamento mantém as regras de status e devolução única da reserva.
+- Favoritos, rascunhos e um endereço salvo são separados por perfil demonstrativo. Existe tela `#/endereco`; o fechamento recupera o endereço salvo, permite outro destino e só atualiza o endereço da conta com seleção explícita. Pedidos anteriores não são reescritos.
+- Sacola compacta: cada item mostra miniatura, nome, grade, tamanhos em uma linha logo abaixo da grade, quantidade, preço e remoção. Retirado “Cores sortidas” da linha principal. Tecido, cores e aviso completo ficam em “Detalhes da grade”, fechado inicialmente, sem repetir tamanhos. Alterar quantidades preserva os detalhes abertos e a posição da lista.
+- Detalhe do pedido e resumo do fechamento também usam itens compactos, com foto, quantidade, tamanhos e valor visíveis; tecido/cores/aviso ficam em “Detalhes da grade”. O histórico usa somente as características registradas na compra, sem completar dados de pedidos antigos com o catálogo atual.
+- Fechamento: as três etapas (comprador, endereço, transporte/observações) começam recolhidas, com resumo visível atualizado ao preencher. Abrir/fechar preserva os campos e o rascunho; etapas com dados inválidos abrem ao enviar para permitir foco e mensagem no campo. O telefone recebe validação no formulário, além da validação já existente no serviço local. Isto continua sendo validação funcional do protótipo, sem substituir validações futuras no banco/API.
+- Migração local aditiva: mesma chave e `version: 1`, com `accountRevision: 2`. `favoritesByCustomer`, `draftsByCustomer` e `addressesByCustomer` guardam os dados por cliente; `customersById` guarda identidades demonstrativas. `favorites` e `checkoutDraft` representam apenas o perfil ativo, por compatibilidade. Favoritos/rascunho antigos são atribuídos somente ao perfil então ativo. Endereços não são inferidos a partir de pedidos antigos de outros clientes.
+- Cada modelo tem `colors` (lista de `name`/`hex`), tecido e tamanhos. O usuário confirmou **uma unidade por tamanho**, sem quantidades diferentes na mesma grade. As cores são informativas, sem seleção individual nem estoque por cor. Aviso: cores sortidas e substituição conforme disponibilidade.
+- Novos pedidos copiam cores e tecido além de preço/tamanhos. Aparecem em detalhes, sacola, fechamento, pedidos e mensagem de compra. Pedidos antigos sem essas informações continuam sem cores inventadas. O futuro banco deve suportar esses atributos.
+- Aviso de entrega agora tem diálogo visível ao recuperar um destino ou concluir cidade/estado; não abre a cada tecla. Resumo continua na tela. Referência a R$ 30 foi retirada da interface.
+- Botão flutuante de WhatsApp abre atendimento manual e fica oculto durante diálogos. Telefone provisório mantido.
+- Carrossel após o banner de grades usa espaços demonstrativos explicitamente identificados. **Receber depoimentos reais e autorização para publicação** antes de substituir os exemplos; não há envio de avaliações pelo site nesta etapa.
+- Atualizações entre abas da mesma origem continuam locais. **Requisito da integração Supabase:** status confirmado, preparando, enviado, entregue e comprovantes atualizam a área do cliente sem recarregamento e entre aparelhos, sob as permissões corretas. Após reconexão, recuperar o estado oficial. Ainda não implementado como recurso de produção.
+- Login, Supabase, regras confiáveis no banco/API e verificações de produção continuam pendentes.
 
 ## Como orientar a próxima IA ou agente
 
